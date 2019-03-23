@@ -1,9 +1,9 @@
 from flask import render_template, redirect
-from flaskeddit.auth import auth_bp
+from flaskeddit.auth import auth_blueprint
 from flaskeddit.auth.forms import RegisterForm, LoginForm
 
 
-@auth_bp.route("/register", methods=["GET", "POST"])
+@auth_blueprint.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -15,7 +15,7 @@ def register():
     return render_template("register.html", form=form)
 
 
-@auth_bp.route("/login", methods=["GET", "POST"])
+@auth_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -26,6 +26,6 @@ def login():
     return render_template("login.html", form=form)
 
 
-@auth_bp.route("/logout", methods=["POST"])
+@auth_blueprint.route("/logout", methods=["POST"])
 def logout():
     return redirect("/login")

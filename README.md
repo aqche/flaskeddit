@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To run this application you need [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/).
+To run this application you need [Python](https://www.python.org/), [pip](https://pip.pypa.io/en/stable/), and [SQLite](https://www.sqlite.org/).
 
 ### Local Setup
 
@@ -27,10 +27,11 @@ python3 -m venv venv
 pip install -r requirements.txt
 ```
 
-Set the `FLASK_APP` environment variable and start the app.
+Set the `FLASK_APP` environment variable, create the SQLite database, and start the app.
 
 ```
 export FLASK_APP=flaskeddit.py
+flask cli create_db
 flask run
 ```
 
