@@ -6,5 +6,6 @@ itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.1
 pycodestyle==2.5.0
+Safe==0.4
 Werkzeug==0.15.1
 WTForms==2.2.1
