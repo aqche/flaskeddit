@@ -54,3 +54,8 @@ See also the list of [contributors](https://github.com/aqche/flaskeddit/contribu
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for more details.
+
+## Acknowledgments
+
+* [logohub.io](https://logohub.io/) - For the neat logo.
+* [favicon.io](https://favicon.io/) - For the matching favicon.
