@@ -1,3 +1,4 @@
+from flask import render_template
 from flask_login import current_user
 
 from flaskeddit.feed import feed_blueprint
@@ -7,9 +8,9 @@ from flaskeddit.feed import feed_blueprint
 @feed_blueprint.route("/feed")
 def feed():
     if current_user.is_authenticated:
-        return "Recent Posts"
+        return render_template("feed.jinja2")
     else:
-        return "Subscribed Communities' Recent Posts"
+        return render_template("feed.jinja2")
 
 
 @feed_blueprint.route("/feed/top")

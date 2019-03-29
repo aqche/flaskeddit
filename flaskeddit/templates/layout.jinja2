@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="icon"
-      href="{{ url_for('static', file_name='favicon.ico') }}"
+      href="{{ url_for('static', filename='favicon.ico') }}"
       type="image/x-icon"
     />
     <link
@@ -26,16 +26,16 @@
       rel="stylesheet"
       type="text/css"
       media="screen"
-      href="{{ url_for('static', file_name='main.css') }}"
+      href="{{ url_for('static', filename='main.css') }}"
     />
   </head>
   <body>
-    <header>
+    <header class="mb-3">
       <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div class="container">
           <a class="navbar-brand" href="#">
             <img
-              src="{{ url_for('static', file_name='logo.png') }}"
+              src="{{ url_for('static', filename='logo.png') }}"
               height="30"
               alt="logo"
             />
@@ -70,6 +70,24 @@
               </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+              {% if current_user.is_authenticated %}
+              <li class="nav-item">
+                <a
+                  class="nav-link btn btn-outline-primary text-primary m-1"
+                  href="{{ url_for('user.user', user_id=current_user.id) }}"
+                  >User</a
+                >
+              </li>
+              <li class="nav-item">
+                <form action="{{ url_for('auth.logout') }}" method="POST">
+                  <button
+                    class="nav-link btn btn-outline-primary text-primary m-1"
+                  >
+                    Log Out
+                  </button>
+                </form>
+              </li>
+              {% else %}
               <li class="nav-item">
                 <a
                   class="nav-link btn btn-outline-primary text-primary m-1"
@@ -84,12 +102,33 @@
                   >Log In</a
                 >
               </li>
+              {% endif %}
             </ul>
           </div>
         </div>
       </nav>
     </header>
-    <section class="full-height">{% block content %}{% endblock %}</section>
+    <section class="full-height">
+      <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% for
+        category, message in messages %}
+        <div
+          class="alert alert-{{ category }} alert-dismissible fade show"
+          role="alert"
+        >
+          {{ message }}
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %} {% endwith %} {% block content %}{% endblock %}
+      </div>
+    </section>
     <footer class="bg-light">
       <div class="container">
         <div class="row fifth-height">

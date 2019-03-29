@@ -1,4 +1,4 @@
-from flask import redirect, render_template
+from flask import flash, redirect, render_template
 from flask_login import current_user, login_required, login_user, logout_user
 
 from flaskeddit import bcrypt, db
@@ -17,11 +17,8 @@ def register():
         user = User(username=form.username.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
+        flash("Successfully Registered", "primary")
         return redirect("/login")
-    else:
-        print(form.username.errors)
-        print(form.password.errors)
-        print(form.confirm_password.errors)
     return render_template("register.jinja2", form=form)
 
 
@@ -34,12 +31,11 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
+            flash("Successfully Logged In", "primary")
             return redirect("/")
         else:
+            flash("Login Failed", "danger")
             return redirect("/login")
-    else:
-        print(form.username.errors)
-        print(form.password.errors)
     return render_template("login.jinja2", form=form)
 
 
