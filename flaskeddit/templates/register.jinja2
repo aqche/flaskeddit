@@ -1,4 +1,5 @@
 {% extends "layout.jinja2" %} {% block content %}
+<h2>Register</h2>
 <form action="{{ url_for('auth.register') }}" method="POST">
   {{ form.csrf_token }}
   <div class="form-group">
