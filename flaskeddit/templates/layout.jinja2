@@ -110,23 +110,25 @@
     </header>
     <section class="full-height">
       <div class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %} {% for
-        category, message in messages %}
-        <div
-          class="alert alert-{{ category }} alert-dismissible fade show"
-          role="alert"
-        >
-          {{ message }}
-          <button
-            type="button"
-            class="close"
-            data-dismiss="alert"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {% endfor %} {% endwith %} {% block content %}{% endblock %}
+        {% with messages = get_flashed_messages(with_categories=true) %} 
+          {% for category, message in messages %}
+            <div
+              class="alert alert-{{ category }} alert-dismissible fade show"
+              role="alert"
+            >
+              {{ message }}
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endfor %} 
+        {% endwith %} 
+        {% block content %} {% endblock %}
       </div>
     </section>
     <footer class="bg-light">

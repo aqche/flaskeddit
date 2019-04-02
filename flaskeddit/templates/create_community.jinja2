@@ -5,13 +5,14 @@
   <div class="form-group">
     {{ form.name.label }}
     {% if form.name.errors %}
-    {{ form.name(class="form-control is-invalid") }}
-    {% for error in form.name.errors %}
-    <div class="invalid-feedback">
-      {{ error }}
-    </div>
-    {% endfor %} {% else %}
-    {{ form.name(class="form-control") }}
+      {{ form.name(class="form-control is-invalid") }}
+      {% for error in form.name.errors %}
+        <div class="invalid-feedback">
+          {{ error }}
+        </div>
+      {% endfor %} 
+    {% else %}
+      {{ form.name(class="form-control") }}
     {% endif %}
   </div>
   <div class="form-group">
