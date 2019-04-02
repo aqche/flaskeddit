@@ -14,10 +14,10 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        user = User(username=form.username.data, password=hashed_password)
+        user = User(username=form.username.data.lower(), password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash("Successfully Registered", "primary")
+        flash("Successfully registered.", "primary")
         return redirect(url_for("auth.login"))
     return render_template("register.jinja2", form=form)
 
@@ -28,10 +28,10 @@ def login():
         return redirect(url_for("feed.feed"))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(username=form.username.data.lower()).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash("Successfully Logged In", "primary")
+            flash("Successfully logged in.", "primary")
             return redirect(url_for("feed.feed"))
         else:
             flash("Login Failed", "danger")
@@ -43,5 +43,5 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("Successfully Logged Out", "primary")
+    flash("Successfully logged out.", "primary")
     return redirect(url_for("auth.login"))
