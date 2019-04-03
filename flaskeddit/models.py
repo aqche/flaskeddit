@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
-        return "<User (username='{0}')>".format(self.username)
+        return f"<User (username='{self.username}')>"
 
 
 class Community(db.Model):
@@ -29,9 +29,7 @@ class Community(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     def __repr__(self):
-        return "<Community (name='{0}', description='{1}', date_created='{2}')>".format(
-            self.name, self.description, self.date_created
-        )
+        return f"<Community (name='{self.name}', description='{self.description}', date_created='{self.date_created}')>"
 
 
 class Post(db.Model):
@@ -45,9 +43,7 @@ class Post(db.Model):
     community_id = db.Column(db.Integer, db.ForeignKey("community.id"), nullable=False)
 
     def __repr__(self):
-        return "<Post (title='{0}', post='{1}', date_created='{2}')>".format(
-            self.title, self.post, self.date_created
-        )
+        return f"<Post (title='{self.title}', post='{self.post}', date_created='{self.date_created}')>"
 
 
 class Reply(db.Model):
@@ -60,6 +56,4 @@ class Reply(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
 
     def __repr__(self):
-        return "<Reply (reply='{0}', date_created='{1}')>".format(
-            self.reply, self.date_created
-        )
+        return f"<Reply (reply='{self.reply}', date_created='{self.date_created}')>"

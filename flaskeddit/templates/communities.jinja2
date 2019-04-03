@@ -1,0 +1,5 @@
+{% extends "layout.jinja2" %} {% block content %}
+{% for community in communities %}
+  <p>{{ community.name }}</p>
+{% endfor %}
+{% endblock %}
