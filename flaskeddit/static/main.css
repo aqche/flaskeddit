@@ -1,5 +1,6 @@
 .full-height {
-  height: 90vh;
+  height: auto;
+  min-height: 90vh;
 }
 
 .fifth-height {
