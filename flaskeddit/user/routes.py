@@ -1,9 +1,9 @@
 from flaskeddit.user import user_blueprint
 
 
-@user_blueprint.route("/user/<int:user_id>")
-def user(user_id):
-    return "User Profile"
+@user_blueprint.route("/user/<string:username>")
+def user(username):
+    return f"{username} User Profile"
 
 
 @user_blueprint.route("/user/<int:user_id>/posts")

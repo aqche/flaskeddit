@@ -7,3 +7,4 @@ class Config:
         "SQLALCHEMY_DATABASE_URI", "sqlite:///app.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    USE_SESSION_FOR_NEXT = True

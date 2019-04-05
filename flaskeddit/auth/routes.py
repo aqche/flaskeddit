@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from flaskeddit import bcrypt, db
@@ -32,6 +32,8 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             flash("Successfully logged in.", "primary")
+            if session.get("next"):
+                return redirect(session.get("next"))
             return redirect(url_for("feed.feed"))
         else:
             flash("Login Failed", "danger")

@@ -16,8 +16,8 @@
     {% for community in communities %}
       <div class="card mb-2">
         <div class="card-body">
-          <h5 class="card-title"><a class="text-dark" href="{{ url_for('community.community', name=community.name) }}">f/{{ community.name }}</a></h5>
-          <h6 class="card-subtitle text-muted"><small>Created {{ community.date_created.strftime('%m/%d/%Y') }} by u/User</small></h6>
+          <h5 class="card-title"><a class="text-dark" href="{{ url_for('community.community', name=community[0].name) }}">f/{{ community[0].name }}</a></h5>
+          <h6 class="card-subtitle text-muted"><small>Created {{ community[0].date_created.strftime('%m/%d/%Y') }} by <a class="text-muted" href="{{ url_for('user.user', username=community[1]) }}">u/{{ community[1] }}</a></small></h6>
         </div>
       </div>
     {% endfor %}
