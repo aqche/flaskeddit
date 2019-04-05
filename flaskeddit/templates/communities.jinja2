@@ -10,10 +10,10 @@
     {% endif %}
   </ol>
 </nav>
-<h2>Communities</h2>
+<h2 class="mb-2">Communities</h2>
 <div class="row">
   <div class="col-8">
-    {% for community in communities %}
+    {% for community in communities.items %}
       <div class="card mb-2">
         <div class="card-body">
           <h5 class="card-title"><a class="text-dark" href="{{ url_for('community.community', name=community[0].name) }}">f/{{ community[0].name }}</a></h5>
@@ -21,6 +21,16 @@
         </div>
       </div>
     {% endfor %}
+    <nav class="my-2" aria-label="Page navigation example">
+      <ul class="pagination">
+        {% if communities.prev_num %} 
+          <li class="page-item"><a class="page-link" href="?page={{ communities.prev_num }}">Previous</a></li>
+        {% endif %}
+        {% if communities.next_num %} 
+          <li class="page-item"><a class="page-link" href="?page={{ communities.next_num }}">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
   </div>
   <div class="col-4">
     <div class="card">
