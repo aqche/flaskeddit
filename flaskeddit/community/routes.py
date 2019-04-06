@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 
 from flaskeddit import db
 from flaskeddit.community import community_blueprint
-from flaskeddit.community.forms import CommunityForm
+from flaskeddit.community.forms import CommunityForm, UpdateCommunityForm
 from flaskeddit.models import Community, Post, User
 
 
@@ -53,13 +53,29 @@ def create_community():
     return render_template("create_community.jinja2", form=form)
 
 
-@community_blueprint.route("/community/<int:community_id>/update")
+@community_blueprint.route("/community/<string:name>/update", methods=["GET", "POST"])
 @login_required
-def update_community(community_id):
-    return "Update Community"
+def update_community(name):
+    community = Community.query.filter_by(name=name).first_or_404()
+    if current_user.id != community.user_id:
+        return redirect(url_for("community.community", name=name))
+    form = UpdateCommunityForm()
+    if form.validate_on_submit():
+        community.description = form.description.data
+        db.session.commit()
+        flash("Successfully updated community.", "primary")
+        return redirect(url_for("community.community", name=name))
+    form.description.data = community.description
+    return render_template("update_community.jinja2", name=name, form=form)
 
 
-@community_blueprint.route("/community/<int:community_id>/delete")
+@community_blueprint.route("/community/<string:name>/delete", methods=["POST"])
 @login_required
-def delete_community(community_id):
-    return "Delete Community"
+def delete_community(name):
+    community = Community.query.filter_by(name=name).first_or_404()
+    if current_user.id != community.user_id:
+        return redirect(url_for("community.community", name=name))
+    db.session.delete(community)
+    db.session.commit()
+    flash("Successfully deleted community.", "primary")
+    return redirect(url_for("feed.feed"))

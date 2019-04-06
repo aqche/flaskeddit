@@ -66,11 +66,33 @@
         <p class="card-text">
           {{ community.description }}
         </p>
-        <a
-          href="{{ url_for('post.create_post', name=community.name) }}"
-          class="btn btn-sm btn-primary"
-          >Create Post</a
-        >
+        <div class="container-fluid">
+          <div class="row">
+            <a
+              href="{{ url_for('post.create_post', name=community.name) }}"
+              class="btn btn-sm btn-primary mb-1"
+              >Post</a
+            >
+          </div>
+          {% if current_user.is_authenticated and current_user.id == community.user_id %}
+            <div class="row">
+              <a
+                href="{{ url_for('community.update_community', name=community.name) }}"
+                class="btn btn-sm btn-primary mb-1"
+                >Update</a
+              >
+            </div>
+            <div class="row">
+              <form action="{{ url_for('community.delete_community', name=community.name) }}" method="POST">
+                <button
+                    class="btn btn-sm btn-primary"
+                >
+                  Delete
+                </button>
+              </form>
+            </div>       
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>

@@ -22,3 +22,8 @@ class CommunityForm(Form):
         ).first()
         if community is not None:
             raise ValidationError("Name is already taken.")
+
+
+class UpdateCommunityForm(Form):
+    description = TextAreaField("Description", validators=[DataRequired()])
+    submit = SubmitField("Update")
