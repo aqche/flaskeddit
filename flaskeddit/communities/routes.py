@@ -25,6 +25,6 @@ def top_communities():
         db.session.query(Community, User.username)
         .join(Community, Community.user_id == User.id)
         .order_by(Community.date_created.desc())
-        .paginate(page=page, per_page=1)
+        .paginate(page=page, per_page=5)
     )
     return render_template("communities.jinja2", page="top", communities=communities)

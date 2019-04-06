@@ -4,36 +4,36 @@
     {% if page == "recent" %}
       <li class="breadcrumb-item active" aria-current="page">Recent</li>
       <li class="breadcrumb-item">
-        <a href="{{ url_for('communities.top_communities') }}">Top</a>
+        <a href="{{ url_for('community.top_community', name=community.name) }}">Top</a>
       </li>
     {% elif page == "top" %}
       <li class="breadcrumb-item">
-        <a href="{{ url_for('communities.communities') }}">Recent</a>
+        <a href="{{ url_for('community.community', name=community.name) }}">Recent</a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">Top</li>
     {% endif %}
   </ol>
 </nav>
-<h2 class="mb-2">Communities</h2>
+<h2 class="mb-2">f/{{ community.name }}</h2>
 <div class="row">
   <div class="col-8">
-    {% for community in communities.items %}
+    {% for post in posts.items %}
       <div class="card mb-2">
         <div class="card-body">
           <h5 class="card-title">
             <a
               class="text-dark"
-              href="{{ url_for('community.community', name=community[0].name) }}"
-              >f/{{ community[0].name }}</a
+              href="{{ url_for('post.post', name=community.name, title=post[0].title) }}"
+              >{{ post[0].title }}</a
             >
           </h5>
           <h6 class="card-subtitle text-muted">
             <small
-              >Created {{ community[0].date_created.strftime("%m/%d/%Y") }} by
+              >Created {{ post[0].date_created.strftime("%m/%d/%Y") }} by
               <a
                 class="text-muted"
-                href="{{ url_for('user.user', username=community[1]) }}"
-                >u/{{ community[1] }}</a
+                href="{{ url_for('user.user', username=post[1]) }}"
+                >u/{{ post[1] }}</a
               ></small
             >
           </h6>
@@ -42,16 +42,16 @@
     {% endfor %}
     <nav class="my-2" aria-label="Page navigation example">
       <ul class="pagination">
-        {% if communities.prev_num %}
+        {% if posts.prev_num %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ communities.prev_num }}"
+            <a class="page-link" href="?page={{ posts.prev_num }}"
               >Previous</a
             >
           </li>
         {% endif %}
-        {% if communities.next_num %}
+        {% if posts.next_num %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ communities.next_num }}">Next</a>
+            <a class="page-link" href="?page={{ posts.next_num }}">Next</a>
           </li>
         {% endif %}
       </ul>
@@ -60,17 +60,16 @@
   <div class="col-4">
     <div class="card">
       <div class="card-header">
-        Communities
+        Community Details
       </div>
       <div class="card-body">
         <p class="card-text">
-          Find a subflaskeddit with a topic you're interested in or create one
-          for yourself.
+          {{ community.description }}
         </p>
         <a
-          href="{{ url_for('community.create_community') }}"
+          href="{{ url_for('post.create_post', name=community.name) }}"
           class="btn btn-sm btn-primary"
-          >Create</a
+          >Create Post</a
         >
       </div>
     </div>

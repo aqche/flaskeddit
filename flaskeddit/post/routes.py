@@ -3,15 +3,15 @@ from flask_login import login_required
 from flaskeddit.post import post_blueprint
 
 
-@post_blueprint.route("/community/<int:community_id>/post/<int:post_id>")
-def post(community_id, post_id):
-    return "View Post"
+@post_blueprint.route("/community/<string:name>/post/<string:title>")
+def post(name, title):
+    return f"View Post {title}"
 
 
-@post_blueprint.route("/community/<int:community_id>/post/create")
+@post_blueprint.route("/community/<string:name>/post/create")
 @login_required
-def create_post(community_id):
-    return "Create Post"
+def create_post(name):
+    return f"Create Post for {name}"
 
 
 @post_blueprint.route("/community/<int:community_id>/post/<int:post_id>/update")

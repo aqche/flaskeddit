@@ -1,20 +1,39 @@
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
 from flaskeddit.community import community_blueprint
 from flaskeddit.community.forms import CommunityForm
-from flaskeddit.models import Community
+from flaskeddit.models import Community, Post, User
 
 
 @community_blueprint.route("/community/<string:name>")
 def community(name):
-    return "Recent {0} Community Posts".format(name)
+    page = int(request.args.get("page", 1))
+    community = Community.query.filter_by(name=name).first_or_404()
+    posts = (
+        db.session.query(Post, User.username)
+        .join(Post, Post.user_id == User.id)
+        .paginate(page=page, per_page=5)
+    )
+    return render_template(
+        "community.jinja2", page="recent", community=community, posts=posts
+    )
 
 
-@community_blueprint.route("/community/<int:community_id>/top")
-def top_community_posts(community_id):
-    return "Top Community Posts"
+@community_blueprint.route("/community/<string:name>/top")
+def top_community(name):
+    # TODO: Update to sort by most replied/votes?
+    page = int(request.args.get("page", 1))
+    community = Community.query.filter_by(name=name).first_or_404()
+    posts = (
+        db.session.query(Post, User.username)
+        .join(Post, Post.user_id == User.id)
+        .paginate(page=page, per_page=5)
+    )
+    return render_template(
+        "community.jinja2", page="top", community=community, posts=posts
+    )
 
 
 @community_blueprint.route("/community/create", methods=["GET", "POST"])
