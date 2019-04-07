@@ -1,10 +1,10 @@
 import re
 
 from flask_wtf import Form
-from sqlalchemy import func
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError
 
+from flaskeddit import db
 from flaskeddit.models import Community
 
 
@@ -18,7 +18,7 @@ class CommunityForm(Form):
             raise ValidationError("Name cannot contain a space.")
 
         community = Community.query.filter(
-            func.lower(Community.name) == name.data.lower()
+            db.func.lower(Community.name) == name.data.lower()
         ).first()
         if community is not None:
             raise ValidationError("Name is already taken.")

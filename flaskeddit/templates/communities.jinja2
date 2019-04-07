@@ -23,17 +23,17 @@
           <h5 class="card-title">
             <a
               class="text-dark"
-              href="{{ url_for('community.community', name=community[0].name) }}"
-              >f/{{ community[0].name }}</a
+              href="{{ url_for('community.community', name=community.name) }}"
+              >f/{{ community.name }}</a
             >
           </h5>
           <h6 class="card-subtitle text-muted">
             <small
-              >Created {{ community[0].date_created.strftime("%m/%d/%Y") }} by
+              >Created on {{ community.date_created.strftime("%m/%d/%Y") }} by
               <a
                 class="text-muted"
-                href="{{ url_for('user.user', username=community[1]) }}"
-                >u/{{ community[1] }}</a
+                href="{{ url_for('user.user', username=community.user.username) }}"
+                >u/{{ community.user.username }}</a
               ></small
             >
           </h6>

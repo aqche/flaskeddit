@@ -4,18 +4,14 @@ from flask_login import current_user, login_required
 from flaskeddit import db
 from flaskeddit.community import community_blueprint
 from flaskeddit.community.forms import CommunityForm, UpdateCommunityForm
-from flaskeddit.models import Community, Post, User
+from flaskeddit.models import Community
 
 
 @community_blueprint.route("/community/<string:name>")
 def community(name):
     page = int(request.args.get("page", 1))
     community = Community.query.filter_by(name=name).first_or_404()
-    posts = (
-        db.session.query(Post, User.username)
-        .join(Post, Post.user_id == User.id)
-        .paginate(page=page, per_page=5)
-    )
+    posts = community.posts.paginate(page=page, per_page=5)
     return render_template(
         "community.jinja2", page="recent", community=community, posts=posts
     )
@@ -26,11 +22,7 @@ def top_community(name):
     # TODO: Update to sort by most replied/votes?
     page = int(request.args.get("page", 1))
     community = Community.query.filter_by(name=name).first_or_404()
-    posts = (
-        db.session.query(Post, User.username)
-        .join(Post, Post.user_id == User.id)
-        .paginate(page=page, per_page=5)
-    )
+    posts = community.posts.paginate(page=page, per_page=5)
     return render_template(
         "community.jinja2", page="top", community=community, posts=posts
     )
@@ -42,9 +34,7 @@ def create_community():
     form = CommunityForm()
     if form.validate_on_submit():
         community = Community(
-            name=form.name.data,
-            description=form.description.data,
-            user_id=current_user.id,
+            name=form.name.data, description=form.description.data, user=current_user
         )
         db.session.add(community)
         db.session.commit()
