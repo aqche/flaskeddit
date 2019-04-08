@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
-from flaskeddit.models import Community, Post
+from flaskeddit.models import Community, Post, Reply
 from flaskeddit.post import post_blueprint
 from flaskeddit.post.forms import PostForm
 
@@ -11,8 +11,21 @@ from flaskeddit.post.forms import PostForm
 def post(name, title):
     page = int(request.args.get("page", 1))
     post = Post.query.filter_by(title=title).first_or_404()
-    replies = post.replies.paginate(page=1, per_page=5)
-    return render_template("post.jinja2", post=post, replies=replies)
+    replies = post.replies.order_by(Reply.date_created.desc()).paginate(
+        page=page, per_page=5
+    )
+    return render_template("post.jinja2", page="recent", post=post, replies=replies)
+
+
+@post_blueprint.route("/community/<string:name>/post/<string:title>/top")
+def top_post(name, title):
+    # TODO: Update to sort by most votes?
+    page = int(request.args.get("page", 1))
+    post = Post.query.filter_by(title=title).first_or_404()
+    replies = post.replies.order_by(Reply.date_created.desc()).paginate(
+        page=page, per_page=5
+    )
+    return render_template("post.jinja2", page="top", post=post, replies=replies)
 
 
 @post_blueprint.route("/community/<string:name>/post/create", methods=["GET", "POST"])
@@ -29,7 +42,7 @@ def create_post(name):
         )
         db.session.add(post)
         db.session.commit()
-        flash("Successfuly created post.", "primary")
+        flash("Successfully created post.", "primary")
         return redirect(url_for("post.post", name=name, title=post.title))
     return render_template("create_post.jinja2", name=name, form=form)
 

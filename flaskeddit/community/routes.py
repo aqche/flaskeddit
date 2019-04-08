@@ -39,7 +39,7 @@ def create_community():
         db.session.add(community)
         db.session.commit()
         flash("Successfully created community.", "primary")
-        return redirect(url_for("community.community", name=form.name.data))
+        return redirect(url_for("community.community", name=community.name))
     return render_template("create_community.jinja2", form=form)
 
 

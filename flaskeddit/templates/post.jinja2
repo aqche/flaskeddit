@@ -23,6 +23,23 @@
         </p>
       </div>
     </div>
+    <p class="text-muted ml-1">
+      Sort by: 
+      {% if page == "recent" %} 
+        Recent /
+        <a
+          href="{{ url_for('post.top_post', name=post.community.name, title=post.title) }}"
+          >Top</a
+        >
+      {% elif page == "top" %}
+        <a
+          href="{{ url_for('post.post', name=post.community.name, title=post.title) }}"
+          >Recent</a
+        >
+        / Top 
+      {% endif %}
+    </p>
+    <hr />
     {% for reply in replies.items %}
       <div class="card mb-2">
         <div class="card-body">
@@ -50,7 +67,7 @@
               >Previous</a
             >
           </li>
-        {% endif %}
+        {% endif %} 
         {% if replies.next_num %}
           <li class="page-item">
             <a class="page-link" href="?page={{ replies.next_num }}">Next</a>
@@ -62,14 +79,25 @@
   <div class="col-4">
     <div class="card">
       <div class="card-header">
-        <a class="text-dark" href="{{ url_for("community.community", name=post.community.name) }}">f/{{ post.community.name }}</a>
+        <a
+          class="text-dark"
+          href="{{ url_for('community.community', name=post.community.name) }}"
+          >f/{{ post.community.name }}</a
+        >
       </div>
       <div class="card-body">
         <p class="card-text">
           {{ post.community.description }}
         </p>
-        {% if current_user.is_authenticated and current_user.id == community.user_id %}
-          <div class="container-fluid">
+        <div class="container-fluid">
+          <div class="row">
+            <a
+              href="{{ url_for('reply.reply', name=post.community.name, title=post.title) }}"
+              class="btn btn-sm btn-primary mb-1"
+              >Reply</a
+            >
+          </div>
+          {% if current_user.is_authenticated and current_user.id == post.user_id %}
             <div class="row">
               <a
                 href="{{ url_for('post.update_post', name=post.community.name, title=post.title) }}"
@@ -78,16 +106,17 @@
               >
             </div>
             <div class="row">
-              <form action="{{ url_for('post.delete_post', name=post.community.name, title=post.title) }}" method="POST">
-                <button
-                    class="btn btn-sm btn-primary"
-                >
+              <form
+                action="{{ url_for('post.delete_post', name=post.community.name, title=post.title) }}"
+                method="POST"
+              >
+                <button class="btn btn-sm btn-primary">
                   Delete
                 </button>
               </form>
-            </div>       
-          </div>
-        {% endif %}
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
