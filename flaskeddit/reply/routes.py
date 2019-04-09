@@ -24,16 +24,36 @@ def reply(name, title):
 
 
 @reply_blueprint.route(
-    "/community/<string:name>/post/<string:title>/reply/<int:reply_id>/edit"
+    "/community/<string:name>/post/<string:title>/reply/<int:reply_id>/edit",
+    methods=["GET", "POST"],
 )
 @login_required
 def edit_reply(name, title, reply_id):
-    return "Edit Reply"
+    reply = Reply.query.get_or_404(reply_id)
+    if reply.user_id != current_user.id:
+        return redirect(url_for("post.post", name=name, title=title))
+    form = ReplyForm()
+    if form.validate_on_submit():
+        reply.reply = form.reply.data
+        db.session.commit()
+        flash("Successfully updated reply", "primary")
+        return redirect(url_for("post.post", name=name, title=title))
+    form.reply.data = reply.reply
+    return render_template(
+        "update_reply.jinja2", name=name, title=title, reply_id=reply_id, form=form
+    )
 
 
 @reply_blueprint.route(
-    "/community/<string:name>/post/<string:title>/reply/<int:reply_id>/delete"
+    "/community/<string:name>/post/<string:title>/reply/<int:reply_id>/delete",
+    methods=["POST"],
 )
 @login_required
 def delete_reply(name, title, reply_id):
-    return "Delete Reply"
+    reply = Reply.query.get_or_404(reply_id)
+    if reply.user_id != current_user.id:
+        return redirect(url_for("post.post", name=name, title=title))
+    db.session.delete(reply)
+    db.session.commit()
+    flash("Successfully deleted reply.", "primary")
+    return redirect(url_for("post.post", name=name, title=title))
