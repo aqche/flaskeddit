@@ -30,7 +30,9 @@ class Community(db.Model):
         db.DateTime, nullable=False, default=datetime.datetime.utcnow
     )
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    posts = db.relationship("Post", backref="community", lazy="dynamic")
+    posts = db.relationship(
+        "Post", backref="community", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Community (name='{self.name}', description='{self.description}', date_created='{self.date_created}')>"
@@ -45,7 +47,9 @@ class Post(db.Model):
     )
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     community_id = db.Column(db.Integer, db.ForeignKey("community.id"), nullable=False)
-    replies = db.relationship("Reply", backref="post", lazy="dynamic")
+    replies = db.relationship(
+        "Reply", backref="post", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Post (title='{self.title}', post='{self.post}', date_created='{self.date_created}')>"

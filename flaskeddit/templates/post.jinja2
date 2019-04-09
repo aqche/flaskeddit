@@ -57,7 +57,7 @@
               {% if current_user.is_authenticated and current_user.id == reply.user_id %}
                 &#183; <a
                   class="text-muted"
-                  href="{{ url_for('reply.edit_reply', name=post.community.name, title=post.title, reply_id=reply.id) }}"
+                  href="{{ url_for('reply.update_reply', name=post.community.name, title=post.title, reply_id=reply.id) }}"
                   >Edit</a
                 >       
               {% endif %}
@@ -118,7 +118,7 @@
                 action="{{ url_for('post.delete_post', name=post.community.name, title=post.title) }}"
                 method="POST"
               >
-                <button class="btn btn-sm btn-primary">
+                <button class="btn btn-sm btn-danger">
                   Delete
                 </button>
               </form>

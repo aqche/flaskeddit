@@ -28,7 +28,7 @@ def reply(name, title):
     methods=["GET", "POST"],
 )
 @login_required
-def edit_reply(name, title, reply_id):
+def update_reply(name, title, reply_id):
     reply = Reply.query.get_or_404(reply_id)
     if reply.user_id != current_user.id:
         return redirect(url_for("post.post", name=name, title=title))

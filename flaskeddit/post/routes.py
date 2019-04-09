@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from flaskeddit import db
 from flaskeddit.models import Community, Post, Reply
 from flaskeddit.post import post_blueprint
-from flaskeddit.post.forms import PostForm
+from flaskeddit.post.forms import PostForm, UpdatePostForm
 
 
 @post_blueprint.route("/community/<string:name>/post/<string:title>")
@@ -52,7 +52,17 @@ def create_post(name):
 )
 @login_required
 def update_post(name, title):
-    return "Update Post"
+    post = Post.query.filter_by(title=title).first_or_404()
+    if post.user_id != current_user.id:
+        return redirect(url_for("post.post", name=name, title=title))
+    form = UpdatePostForm()
+    if form.validate_on_submit():
+        post.post = form.post.data
+        db.session.commit()
+        flash("Successfully updated community.", "primary")
+        return redirect(url_for("post.post", name=name, title=title))
+    form.post.data = post.post
+    return render_template("update_post.jinja2", name=name, title=title)
 
 
 @post_blueprint.route(
@@ -60,4 +70,10 @@ def update_post(name, title):
 )
 @login_required
 def delete_post(name, title):
-    return "Delete Post"
+    post = Post.query.filter_by(title=title).first_or_404()
+    if post.user_id != current_user.id:
+        return redirect(url_for("post.post", name=name, title=title))
+    db.session.delete(post)
+    db.session.commit()
+    flash("Successfully deleted reply.", "primary")
+    return redirect(url_for("community.community", name=name))

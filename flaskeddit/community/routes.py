@@ -47,7 +47,7 @@ def create_community():
 @login_required
 def update_community(name):
     community = Community.query.filter_by(name=name).first_or_404()
-    if current_user.id != community.user_id:
+    if community.user_id != current_user.id:
         return redirect(url_for("community.community", name=name))
     form = UpdateCommunityForm()
     if form.validate_on_submit():
@@ -63,7 +63,7 @@ def update_community(name):
 @login_required
 def delete_community(name):
     community = Community.query.filter_by(name=name).first_or_404()
-    if current_user.id != community.user_id:
+    if community.user_id != current_user.id:
         return redirect(url_for("community.community", name=name))
     db.session.delete(community)
     db.session.commit()
