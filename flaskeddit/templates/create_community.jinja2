@@ -1,5 +1,5 @@
 {% extends "layout.jinja2" %} {% block content %}
-<h2 class="mb-2">Create Community</h2>
+<h2 class="mb-3">Create Community</h2>
 <form action="{{ url_for('community.create_community') }}" method="POST">
   {{ form.csrf_token }}
   <div class="form-group">

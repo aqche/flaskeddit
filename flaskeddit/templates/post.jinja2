@@ -1,26 +1,45 @@
 {% extends "layout.jinja2" %} {% block content %}
-<h2 class="mb-2">{{ post.title }}</h2>
+<h2 class="mb-3">{{ post.title }}</h2>
 <div class="row">
   <div class="col-8">
     <div class="card mb-2">
-      <div class="card-body">
-        <h4 class="card-title">
-          {{ post.title }}
-        </h4>
-        <h6 class="card-subtitle text-muted mb-3">
-          <small
-            >Posted on {{ post.date_created.strftime("%m/%d/%Y") }} by
-            <a
-              class="text-muted"
-              href="{{ url_for('user.user', username=post.user.username) }}"
-              >u/{{ post.user.username }}</a
-            >
-            </small
-          >
-        </h6>
-        <p class="card-text">
-          {{ post.post }}
-        </p>
+      <div class="row">
+        <div class="col-2">
+          <ul class="list-group text-center border-0">
+            <li class="list-group-item py-1 my-1 border-0">
+              <form action="{{ url_for('post.upvote_post', name=post.community.name, title=post.title) }}" method="POST">
+                <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
+              </form>
+            </li>
+            <li class="list-group-item py-1 my-1 border-0"><small>0</small></li>
+            <li class="list-group-item py-1 my-1 border-0">
+              <form action="{{ url_for('post.downvote_post', name=post.community.name, title=post.title) }}" method="POST">
+                <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
+              </form>    
+            </li>
+          </ul>
+        </div>
+        <div class="col-10">
+          <div class="card-body">
+            <h4 class="card-title">
+              {{ post.title }}
+            </h4>
+            <h6 class="card-subtitle text-muted mb-3">
+              <small
+                >Posted on {{ post.date_created.strftime("%m/%d/%Y") }} by
+                <a
+                  class="text-muted"
+                  href="{{ url_for('user.user', username=post.user.username) }}"
+                  >u/{{ post.user.username }}</a
+                >
+                </small
+              >
+            </h6>
+            <p class="card-text">
+              {{ post.post }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
     <p class="text-muted ml-1">
@@ -42,28 +61,47 @@
     <hr />
     {% for reply in replies.items %}
       <div class="card mb-2">
-        <div class="card-body">
-          <p class="card-text">
-            {{ reply.reply }}
-          </p>
-          <h6 class="card-subtitle text-muted">
-            <small
-              >Replied on {{ reply.date_created.strftime("%m/%d/%Y") }} by
-              <a
-                class="text-muted"
-                href="{{ url_for('user.user', username=reply.user.username) }}"
-                >u/{{ reply.user.username }}</a
-              >
-              {% if current_user.is_authenticated and current_user.id == reply.user_id %}
-                &#183; <a
-                  class="text-muted"
-                  href="{{ url_for('reply.update_reply', name=post.community.name, title=post.title, reply_id=reply.id) }}"
-                  >Edit</a
-                >       
-              {% endif %}
-              </small
-            >
-          </h6>
+        <div class="row">
+          <div class="col-2">
+            <ul class="list-group text-center border-0">
+              <li class="list-group-item py-1 border-0">
+                <form action="{{ url_for('reply.upvote_reply', name=post.community.name, title=post.title, reply_id=reply.id) }}" method="POST">
+                  <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
+                </form>
+              </li>
+              <li class="list-group-item py-1 border-0"><small>0</small></li>
+              <li class="list-group-item py-1 border-0">
+                <form action="{{ url_for('reply.downvote_reply', name=post.community.name, title=post.title, reply_id=reply.id) }}" method="POST">
+                  <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
+                </form>              
+              </li>
+            </ul>
+          </div>
+          <div class="col-10">
+            <div class="card-body">
+              <p class="card-text">
+                {{ reply.reply }}
+              </p>
+              <h6 class="card-subtitle text-muted">
+                <small
+                  >Replied on {{ reply.date_created.strftime("%m/%d/%Y") }} by
+                  <a
+                    class="text-muted"
+                    href="{{ url_for('user.user', username=reply.user.username) }}"
+                    >u/{{ reply.user.username }}</a
+                  >
+                  {% if current_user.is_authenticated and current_user.id == reply.user_id %}
+                    &#183; <a
+                      class="text-muted"
+                      href="{{ url_for('reply.update_reply', name=post.community.name, title=post.title, reply_id=reply.id) }}"
+                      >Edit</a
+                    >       
+                  {% endif %}
+                  </small
+                >
+              </h6>
+            </div>
+          </div>
         </div>
       </div>
     {% endfor %}

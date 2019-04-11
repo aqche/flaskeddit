@@ -1,5 +1,5 @@
 {% extends "layout.jinja2" %} {% block content %}
-<h2 class="mb-2">Create Reply</h2>
+<h2 class="mb-3">Create Reply</h2>
 <form action="{{ url_for('reply.reply', name=name, title=title) }}" method="POST">
   {{ form.csrf_token }}
   <div class="form-group">

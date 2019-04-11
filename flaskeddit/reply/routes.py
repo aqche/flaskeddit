@@ -57,3 +57,21 @@ def delete_reply(name, title, reply_id):
     db.session.commit()
     flash("Successfully deleted reply.", "primary")
     return redirect(url_for("post.post", name=name, title=title))
+
+
+@reply_blueprint.route(
+    "/community/<string:name>/post/<string:title>/reply/<int:reply_id>/upvote",
+    methods=["POST"],
+)
+@login_required
+def upvote_reply(name, title, reply_id):
+    return "Upvote Reply"
+
+
+@reply_blueprint.route(
+    "/community/<string:name>/post/<string:title>/reply/<int:reply_id>/downvote",
+    methods=["POST"],
+)
+@login_required
+def downvote_reply(name, title, reply_id):
+    return "Downvote Reply"

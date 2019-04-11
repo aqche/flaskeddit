@@ -66,3 +66,17 @@ class Reply(db.Model):
 
     def __repr__(self):
         return f"<Reply (reply='{self.reply}', date_created='{self.date_created}')>"
+
+
+class PostVotes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    vote = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
+
+
+class ReplyVotes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    vote = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    reply_id = db.Column(db.Integer, db.ForeignKey("reply.id"), nullable=False)
