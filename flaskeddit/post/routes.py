@@ -84,7 +84,8 @@ def delete_post(name, title):
 )
 @login_required
 def upvote_post(name, title):
-    return "Upvote Post"
+    print("Upvote Post")
+    return redirect(request.referrer)
 
 
 @post_blueprint.route(
@@ -92,5 +93,5 @@ def upvote_post(name, title):
 )
 @login_required
 def downvote_post(name, title):
-    return "Downvote Post"
-
+    print("Downvote Post")
+    return redirect(request.referrer)

@@ -40,6 +40,7 @@ Now you can give the application a try at [http://localhost:5000](http://localho
 ## Built With
 
 * [Flask](http://flask.pocoo.org/) - Python Framework
+* [Bootstrap](https://getbootstrap.com/) - CSS Framework
 
 ## Contributing
 
@@ -57,5 +58,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## Acknowledgments
 
+* [reddit](https://www.reddit.com/) - The inspiration for this site.
 * [logohub.io](https://logohub.io/) - For the neat logo.
 * [favicon.io](https://favicon.io/) - For the matching favicon.

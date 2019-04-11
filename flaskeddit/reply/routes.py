@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
@@ -65,7 +65,8 @@ def delete_reply(name, title, reply_id):
 )
 @login_required
 def upvote_reply(name, title, reply_id):
-    return "Upvote Reply"
+    print("Upvote Reply")
+    return redirect(request.referrer)
 
 
 @reply_blueprint.route(
@@ -74,4 +75,5 @@ def upvote_reply(name, title, reply_id):
 )
 @login_required
 def downvote_reply(name, title, reply_id):
-    return "Downvote Reply"
+    print("Downvote Reply")
+    return redirect(request.referrer)
