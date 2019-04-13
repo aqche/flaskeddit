@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
-from flaskeddit.models import Post, Reply
+from flaskeddit.models import Post, Reply, ReplyVote
 from flaskeddit.reply import reply_blueprint
 from flaskeddit.reply.forms import ReplyForm
 
@@ -65,7 +65,16 @@ def delete_reply(name, title, reply_id):
 )
 @login_required
 def upvote_reply(name, title, reply_id):
-    print("Upvote Reply")
+    reply = Reply.query.get_or_404(reply_id)
+    reply_vote = ReplyVote.query.filter_by(
+        user_id=current_user.id, reply_id=reply.id
+    ).first()
+    if reply_vote is None:
+        reply_vote = ReplyVote(vote=1, user_id=current_user.id, reply_id=reply.id)
+        db.session.add(reply_vote)
+    else:
+        reply_vote.vote = 1
+    db.session.commit()
     return redirect(request.referrer)
 
 
@@ -75,5 +84,14 @@ def upvote_reply(name, title, reply_id):
 )
 @login_required
 def downvote_reply(name, title, reply_id):
-    print("Downvote Reply")
+    reply = Reply.query.get_or_404(reply_id)
+    reply_vote = ReplyVote.query.filter_by(
+        user_id=current_user.id, reply_id=reply.id
+    ).first()
+    if reply_vote is None:
+        reply_vote = ReplyVote(vote=-1, user_id=current_user.id, reply_id=reply.id)
+        db.session.add(reply_vote)
+    else:
+        reply_vote.vote = -1
+    db.session.commit()
     return redirect(request.referrer)

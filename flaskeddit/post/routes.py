@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
-from flaskeddit.models import Community, Post, Reply
+from flaskeddit.models import Community, Post, PostVote, Reply
 from flaskeddit.post import post_blueprint
 from flaskeddit.post.forms import PostForm, UpdatePostForm
 
@@ -84,7 +84,16 @@ def delete_post(name, title):
 )
 @login_required
 def upvote_post(name, title):
-    print("Upvote Post")
+    post = Post.query.filter_by(title=title).first_or_404()
+    post_vote = PostVote.query.filter_by(
+        user_id=current_user.id, post_id=post.id
+    ).first()
+    if post_vote is None:
+        post_vote = PostVote(vote=1, user_id=current_user.id, post_id=post.id)
+        db.session.add(post_vote)
+    else:
+        post_vote.vote = 1
+    db.session.commit()
     return redirect(request.referrer)
 
 
@@ -93,5 +102,14 @@ def upvote_post(name, title):
 )
 @login_required
 def downvote_post(name, title):
-    print("Downvote Post")
+    post = Post.query.filter_by(title=title).first_or_404()
+    post_vote = PostVote.query.filter_by(
+        user_id=current_user.id, post_id=post.id
+    ).first()
+    if post_vote is None:
+        post_vote = PostVote(vote=-1, user_id=current_user.id, post_id=post.id)
+        db.session.add(post_vote)
+    else:
+        post_vote.vote = -1
+    db.session.commit()
     return redirect(request.referrer)
