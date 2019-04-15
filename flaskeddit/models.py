@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
     replies = db.relationship("Reply", backref="user", lazy="dynamic")
 
     def __repr__(self):
-        return f"<User (username='{self.username}')>"
+        return f"<User (id='{self.id}', username='{self.username}')>"
 
 
 class Community(db.Model):
@@ -35,7 +35,7 @@ class Community(db.Model):
     )
 
     def __repr__(self):
-        return f"<Community (name='{self.name}', description='{self.description}', date_created='{self.date_created}')>"
+        return f"<Community (id='{self.id}', name='{self.name}', description='{self.description}', date_created='{self.date_created}')>"
 
 
 class Post(db.Model):
@@ -52,7 +52,7 @@ class Post(db.Model):
     )
 
     def __repr__(self):
-        return f"<Post (title='{self.title}', post='{self.post}', date_created='{self.date_created}')>"
+        return f"<Post (id='{self.id}', title='{self.title}', post='{self.post}', date_created='{self.date_created}')>"
 
 
 class Reply(db.Model):
@@ -65,7 +65,7 @@ class Reply(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
 
     def __repr__(self):
-        return f"<Reply (reply='{self.reply}', date_created='{self.date_created}')>"
+        return f"<Reply (id='{self.id}', reply='{self.reply}', date_created='{self.date_created}')>"
 
 
 class PostVote(db.Model):
@@ -74,9 +74,16 @@ class PostVote(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
 
+    def __repr__(self):
+        return f"<PostVote (id='{self.id}', vote='{self.vote}')>"
+
 
 class ReplyVote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     vote = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     reply_id = db.Column(db.Integer, db.ForeignKey("reply.id"), nullable=False)
+
+    def __repr__(self):
+        return f"<ReplyVote (id='{self.id}', vote='{self.vote}')>"
+

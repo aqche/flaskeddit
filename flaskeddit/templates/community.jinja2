@@ -27,7 +27,7 @@
                   <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
                 </form>
               </li>
-              <li class="list-group-item py-1 border-0"><small>0</small></li>
+              <li class="list-group-item py-1 border-0"><small>{{ post.votes }}</small></li>
               <li class="list-group-item py-1 border-0">
                 <form action="{{ url_for('post.downvote_post', name=community.name, title=post.title) }}" method="POST">
                   <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
@@ -49,8 +49,8 @@
                   >Posted on {{ post.date_created.strftime("%m/%d/%Y") }} by
                   <a
                     class="text-muted"
-                    href="{{ url_for('user.user', username=post.user.username) }}"
-                    >u/{{ post.user.username }}</a
+                    href="{{ url_for('user.user', username=post.username) }}"
+                    >u/{{ post.username }}</a
                   ></small
                 >
               </h6>

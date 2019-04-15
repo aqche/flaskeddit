@@ -4,14 +4,36 @@ from flask_login import current_user, login_required
 from flaskeddit import db
 from flaskeddit.community import community_blueprint
 from flaskeddit.community.forms import CommunityForm, UpdateCommunityForm
-from flaskeddit.models import Community
+from flaskeddit.models import Community, Post, PostVote, User
 
 
 @community_blueprint.route("/community/<string:name>")
 def community(name):
     page = int(request.args.get("page", 1))
-    community = Community.query.filter_by(name=name).first_or_404()
-    posts = community.posts.paginate(page=page, per_page=5)
+    community = db.session.query(Community).filter_by(name=name).first_or_404()
+    posts_without_votes = db.session.query(
+        Post, db.literal(0).label("votes")
+    ).filter_by(community_id=community.id)
+    posts_with_votes = (
+        db.session.query(Post, db.func.sum(PostVote.vote).label("votes"))
+        .join(Post, Post.id == PostVote.post_id)
+        .filter_by(community_id=community.id)
+        .group_by(Post.id)
+    )
+    posts_union = posts_without_votes.union_all(posts_with_votes).subquery()
+    posts = (
+        db.session.query(
+            posts_union.c.post_title.label("title"),
+            posts_union.c.post_post.label("post"),
+            posts_union.c.post_date_created.label("date_created"),
+            db.func.sum(posts_union.c.votes).label("votes"),
+            User.username,
+        )
+        .join(posts_union, posts_union.c.post_user_id == User.id)
+        .group_by(posts_union.c.post_id)
+        .order_by(posts_union.c.post_date_created.desc())
+        .paginate(page=page, per_page=5)
+    )
     return render_template(
         "community.jinja2", page="recent", community=community, posts=posts
     )
@@ -19,10 +41,31 @@ def community(name):
 
 @community_blueprint.route("/community/<string:name>/top")
 def top_community(name):
-    # TODO: Update to sort by most replied/votes?
     page = int(request.args.get("page", 1))
-    community = Community.query.filter_by(name=name).first_or_404()
-    posts = community.posts.paginate(page=page, per_page=5)
+    community = db.session.query(Community).filter_by(name=name).first_or_404()
+    posts_without_votes = db.session.query(
+        Post, db.literal(0).label("votes")
+    ).filter_by(community_id=community.id)
+    posts_with_votes = (
+        db.session.query(Post, db.func.sum(PostVote.vote).label("votes"))
+        .join(Post, Post.id == PostVote.post_id)
+        .filter_by(community_id=community.id)
+        .group_by(Post.id)
+    )
+    posts_union = posts_without_votes.union_all(posts_with_votes).subquery()
+    posts = (
+        db.session.query(
+            posts_union.c.post_title.label("title"),
+            posts_union.c.post_post.label("post"),
+            posts_union.c.post_date_created.label("date_created"),
+            db.func.sum(posts_union.c.votes).label("votes"),
+            User.username,
+        )
+        .join(posts_union, posts_union.c.post_user_id == User.id)
+        .group_by(posts_union.c.post_id)
+        .order_by(db.literal_column("votes").desc())
+        .paginate(page=page, per_page=5)
+    )
     return render_template(
         "community.jinja2", page="top", community=community, posts=posts
     )
