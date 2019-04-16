@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
-from flaskeddit.models import Community, Post, PostVote, Reply
+from flaskeddit.models import Community, Post, PostVote, Reply, ReplyVote, User
 from flaskeddit.post import post_blueprint
 from flaskeddit.post.forms import PostForm, UpdatePostForm
 
@@ -10,20 +10,82 @@ from flaskeddit.post.forms import PostForm, UpdatePostForm
 @post_blueprint.route("/community/<string:name>/post/<string:title>")
 def post(name, title):
     page = int(request.args.get("page", 1))
-    post = Post.query.filter_by(title=title).first_or_404()
-    replies = post.replies.order_by(Reply.date_created.desc()).paginate(
-        page=page, per_page=5
+    post = (
+        db.session.query(
+            Post.id,
+            Post.title,
+            Post.post,
+            Post.date_created,
+            Post.user_id,
+            db.func.sum(PostVote.vote).label("votes"),
+            User.username,
+            Community.name.label("community_name"),
+            Community.description.label("community_description"),
+        )
+        .join(User, Post.user_id == User.id)
+        .join(Community, Post.community_id == Community.id)
+        .outerjoin(PostVote, Post.id == PostVote.post_id)
+        .filter(Post.title == title)
+        .group_by(Post.id)
+        .first_or_404()
+    )
+    replies = (
+        db.session.query(
+            Reply.id,
+            Reply.reply,
+            Reply.user_id,
+            Reply.date_created,
+            db.func.sum(ReplyVote.vote).label("votes"),
+            User.username,
+        )
+        .join(User, Reply.user_id == User.id)
+        .outerjoin(ReplyVote, Reply.id == ReplyVote.reply_id)
+        .filter(Reply.post_id == post.id)
+        .group_by(Reply.id)
+        .order_by(Reply.date_created.desc())
+        .paginate(page=page, per_page=5)
     )
     return render_template("post.jinja2", page="recent", post=post, replies=replies)
 
 
 @post_blueprint.route("/community/<string:name>/post/<string:title>/top")
 def top_post(name, title):
-    # TODO: Update to sort by most votes?
     page = int(request.args.get("page", 1))
-    post = Post.query.filter_by(title=title).first_or_404()
-    replies = post.replies.order_by(Reply.date_created.desc()).paginate(
-        page=page, per_page=5
+    post = (
+        db.session.query(
+            Post.id,
+            Post.title,
+            Post.post,
+            Post.date_created,
+            Post.user_id,
+            db.func.sum(PostVote.vote).label("votes"),
+            User.username,
+            Community.name.label("community_name"),
+            Community.description.label("community_description"),
+        )
+        .join(User, Post.user_id == User.id)
+        .join(Community, Post.community_id == Community.id)
+        .outerjoin(PostVote, Post.id == PostVote.post_id)
+        .filter(Post.title == title)
+        .group_by(Post.id)
+        .first_or_404()
+    )
+    # TODO: Handle Replies with 0 votes to fix ordering.
+    replies = (
+        db.session.query(
+            Reply.id,
+            Reply.reply,
+            Reply.user_id,
+            Reply.date_created,
+            db.func.sum(ReplyVote.vote).label("votes"),
+            User.username,
+        )
+        .join(User, Reply.user_id == User.id)
+        .outerjoin(ReplyVote, Reply.id == ReplyVote.reply_id)
+        .filter(Reply.post_id == post.id)
+        .group_by(Reply.id)
+        .order_by(db.literal_column("votes").desc())
+        .paginate(page=page, per_page=5)
     )
     return render_template("post.jinja2", page="top", post=post, replies=replies)
 

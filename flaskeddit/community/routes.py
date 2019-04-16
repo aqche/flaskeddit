@@ -11,13 +11,13 @@ from flaskeddit.models import Community, Post, PostVote, User
 def community(name):
     page = int(request.args.get("page", 1))
     community = db.session.query(Community).filter_by(name=name).first_or_404()
-    posts_without_votes = db.session.query(
-        Post, db.literal(0).label("votes")
-    ).filter_by(community_id=community.id)
+    posts_without_votes = db.session.query(Post, db.literal(0).label("votes")).filter(
+        Post.community_id == community.id
+    )
     posts_with_votes = (
         db.session.query(Post, db.func.sum(PostVote.vote).label("votes"))
-        .join(Post, Post.id == PostVote.post_id)
-        .filter_by(community_id=community.id)
+        .join(PostVote, Post.id == PostVote.post_id)
+        .filter(Post.community_id == community.id)
         .group_by(Post.id)
     )
     posts_union = posts_without_votes.union_all(posts_with_votes).subquery()
@@ -43,13 +43,13 @@ def community(name):
 def top_community(name):
     page = int(request.args.get("page", 1))
     community = db.session.query(Community).filter_by(name=name).first_or_404()
-    posts_without_votes = db.session.query(
-        Post, db.literal(0).label("votes")
-    ).filter_by(community_id=community.id)
+    posts_without_votes = db.session.query(Post, db.literal(0).label("votes")).filter(
+        Post.community_id == community.id
+    )
     posts_with_votes = (
         db.session.query(Post, db.func.sum(PostVote.vote).label("votes"))
-        .join(Post, Post.id == PostVote.post_id)
-        .filter_by(community_id=community.id)
+        .join(PostVote, Post.id == PostVote.post_id)
+        .filter(Post.community_id == community.id)
         .group_by(Post.id)
     )
     posts_union = posts_without_votes.union_all(posts_with_votes).subquery()
