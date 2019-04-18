@@ -11,7 +11,7 @@
                 <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
               </form>
             </li>
-            <li class="list-group-item py-1 my-1 border-0"><small>{% if post.votes != None %} {{ post.votes }} {% else %} 0 {% endif %}</small></li>
+            <li class="list-group-item py-1 my-1 border-0"><small>{{ post.votes }}</small></li>
             <li class="list-group-item py-1 my-1 border-0">
               <form action="{{ url_for('post.downvote_post', name=post.community_name, title=post.title) }}" method="POST">
                 <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
@@ -69,7 +69,7 @@
                   <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
                 </form>
               </li>
-              <li class="list-group-item py-1 border-0"><small>{% if reply.votes != None %} {{ reply.votes }} {% else %} 0 {% endif %}</small></li>
+              <li class="list-group-item py-1 border-0"><small>{{ reply.votes }}</small></li>
               <li class="list-group-item py-1 border-0">
                 <form action="{{ url_for('reply.downvote_reply', name=post.community_name, title=post.title, reply_id=reply.id) }}" method="POST">
                   <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>

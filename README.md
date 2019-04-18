@@ -23,7 +23,7 @@ Use create a `venv` and use `pip` to install the project dependencies.
 ```
 cd flaskeddit
 python3 -m venv venv
-. venv/bin/activate
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
