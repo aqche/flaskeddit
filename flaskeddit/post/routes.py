@@ -35,7 +35,7 @@ def post(name, title):
             Reply.reply,
             Reply.user_id,
             Reply.date_created,
-            db.func.sum(ReplyVote.vote).label("votes"),
+            db.func.ifnull(db.func.sum(ReplyVote.vote), 0).label("votes"),
             User.username,
         )
         .join(User, Reply.user_id == User.id)
@@ -70,14 +70,13 @@ def top_post(name, title):
         .group_by(Post.id)
         .first_or_404()
     )
-    # TODO: Handle Replies with 0 votes to fix ordering.
     replies = (
         db.session.query(
             Reply.id,
             Reply.reply,
             Reply.user_id,
             Reply.date_created,
-            db.func.sum(ReplyVote.vote).label("votes"),
+            db.func.ifnull(db.func.sum(ReplyVote.vote), 0).label("votes"),
             User.username,
         )
         .join(User, Reply.user_id == User.id)

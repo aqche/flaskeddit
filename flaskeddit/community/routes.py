@@ -10,28 +10,20 @@ from flaskeddit.models import Community, Post, PostVote, User
 @community_blueprint.route("/community/<string:name>")
 def community(name):
     page = int(request.args.get("page", 1))
-    community = db.session.query(Community).filter_by(name=name).first_or_404()
-    posts_without_votes = db.session.query(Post, db.literal(0).label("votes")).filter(
-        Post.community_id == community.id
-    )
-    posts_with_votes = (
-        db.session.query(Post, db.func.sum(PostVote.vote).label("votes"))
-        .join(PostVote, Post.id == PostVote.post_id)
-        .filter(Post.community_id == community.id)
-        .group_by(Post.id)
-    )
-    posts_union = posts_without_votes.union_all(posts_with_votes).subquery()
+    community = Community.query.filter_by(name=name).first_or_404()
     posts = (
         db.session.query(
-            posts_union.c.post_title.label("title"),
-            posts_union.c.post_post.label("post"),
-            posts_union.c.post_date_created.label("date_created"),
-            db.func.sum(posts_union.c.votes).label("votes"),
+            Post.title,
+            Post.post,
+            Post.date_created,
+            db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
             User.username,
         )
-        .join(posts_union, posts_union.c.post_user_id == User.id)
-        .group_by(posts_union.c.post_id)
-        .order_by(posts_union.c.post_date_created.desc())
+        .outerjoin(PostVote, Post.id == PostVote.post_id)
+        .join(User, Post.user_id == User.id)
+        .filter(Post.community_id == community.id)
+        .group_by(Post.id)
+        .order_by(Post.date_created.desc())
         .paginate(page=page, per_page=5)
     )
     return render_template(
@@ -42,27 +34,19 @@ def community(name):
 @community_blueprint.route("/community/<string:name>/top")
 def top_community(name):
     page = int(request.args.get("page", 1))
-    community = db.session.query(Community).filter_by(name=name).first_or_404()
-    posts_without_votes = db.session.query(Post, db.literal(0).label("votes")).filter(
-        Post.community_id == community.id
-    )
-    posts_with_votes = (
-        db.session.query(Post, db.func.sum(PostVote.vote).label("votes"))
-        .join(PostVote, Post.id == PostVote.post_id)
-        .filter(Post.community_id == community.id)
-        .group_by(Post.id)
-    )
-    posts_union = posts_without_votes.union_all(posts_with_votes).subquery()
+    community = Community.query.filter_by(name=name).first_or_404()
     posts = (
         db.session.query(
-            posts_union.c.post_title.label("title"),
-            posts_union.c.post_post.label("post"),
-            posts_union.c.post_date_created.label("date_created"),
-            db.func.sum(posts_union.c.votes).label("votes"),
+            Post.title,
+            Post.post,
+            Post.date_created,
+            db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
             User.username,
         )
-        .join(posts_union, posts_union.c.post_user_id == User.id)
-        .group_by(posts_union.c.post_id)
+        .outerjoin(PostVote, Post.id == PostVote.post_id)
+        .join(User, Post.user_id == User.id)
+        .filter(Post.community_id == community.id)
+        .group_by(Post.id)
         .order_by(db.literal_column("votes").desc())
         .paginate(page=page, per_page=5)
     )
