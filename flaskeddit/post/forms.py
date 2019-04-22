@@ -1,12 +1,24 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired
+from wtforms.fields import IntegerField, StringField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, ValidationError
+
+from flaskeddit.models import Post
 
 
 class PostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     post = TextAreaField("Post", validators=[DataRequired()])
+    community_id = IntegerField("Community Id", validators=[DataRequired()])
     submit = SubmitField("Create")
+
+    def validate_title(self, title):
+        post = Post.query.filter_by(
+            title=title.data, community_id=self.community_id.data
+        ).first()
+        if post is not None:
+            raise ValidationError(
+                "Post with same title already exists within this community."
+            )
 
 
 class UpdatePostForm(FlaskForm):

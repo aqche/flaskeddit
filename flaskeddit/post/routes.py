@@ -96,6 +96,7 @@ def top_post(name, title):
 def create_post(name):
     community = Community.query.filter_by(name=name).first_or_404()
     form = PostForm()
+    form.community_id.data = community.id
     if form.validate_on_submit():
         post = Post(
             title=form.title.data,
@@ -115,7 +116,13 @@ def create_post(name):
 )
 @login_required
 def update_post(name, title):
-    post = Post.query.filter_by(title=title).first_or_404()
+    post = (
+        db.session.query(Post)
+        .join(Community, Post.community_id == Community.id)
+        .filter(Post.title == title)
+        .filter(Community.name == name)
+        .first_or_404()
+    )
     if post.user_id != current_user.id:
         return redirect(url_for("post.post", name=name, title=title))
     form = UpdatePostForm()
@@ -125,7 +132,7 @@ def update_post(name, title):
         flash("Successfully updated community.", "primary")
         return redirect(url_for("post.post", name=name, title=title))
     form.post.data = post.post
-    return render_template("update_post.jinja2", name=name, title=title)
+    return render_template("update_post.jinja2", name=name, title=title, form=form)
 
 
 @post_blueprint.route(
@@ -133,12 +140,18 @@ def update_post(name, title):
 )
 @login_required
 def delete_post(name, title):
-    post = Post.query.filter_by(title=title).first_or_404()
+    post = (
+        db.session.query(Post)
+        .join(Community, Post.community_id == Community.id)
+        .filter(Post.title == title)
+        .filter(Community.name == name)
+        .first_or_404()
+    )
     if post.user_id != current_user.id:
         return redirect(url_for("post.post", name=name, title=title))
     db.session.delete(post)
     db.session.commit()
-    flash("Successfully deleted reply.", "primary")
+    flash("Successfully deleted post.", "primary")
     return redirect(url_for("community.community", name=name))
 
 
@@ -147,7 +160,13 @@ def delete_post(name, title):
 )
 @login_required
 def upvote_post(name, title):
-    post = Post.query.filter_by(title=title).first_or_404()
+    post = (
+        db.session.query(Post)
+        .join(Community, Post.community_id == Community.id)
+        .filter(Post.title == title)
+        .filter(Community.name == name)
+        .first_or_404()
+    )
     post_vote = PostVote.query.filter_by(
         user_id=current_user.id, post_id=post.id
     ).first()
@@ -167,7 +186,13 @@ def upvote_post(name, title):
 )
 @login_required
 def downvote_post(name, title):
-    post = Post.query.filter_by(title=title).first_or_404()
+    post = (
+        db.session.query(Post)
+        .join(Community, Post.community_id == Community.id)
+        .filter(Post.title == title)
+        .filter(Community.name == name)
+        .first_or_404()
+    )
     post_vote = PostVote.query.filter_by(
         user_id=current_user.id, post_id=post.id
     ).first()

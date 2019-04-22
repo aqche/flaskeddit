@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
-from flaskeddit.models import Post, Reply, ReplyVote
+from flaskeddit.models import Community, Post, Reply, ReplyVote
 from flaskeddit.reply import reply_blueprint
 from flaskeddit.reply.forms import ReplyForm
 
@@ -12,7 +12,13 @@ from flaskeddit.reply.forms import ReplyForm
 )
 @login_required
 def reply(name, title):
-    post = Post.query.filter_by(title=title).first_or_404()
+    post = (
+        db.session.query(Post)
+        .join(Community, Post.community_id == Community.id)
+        .filter(Post.title == title)
+        .filter(Community.name == name)
+        .first_or_404()
+    )
     form = ReplyForm()
     if form.validate_on_submit():
         reply = Reply(reply=form.reply.data, post=post, user=current_user)
