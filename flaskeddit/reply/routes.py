@@ -72,6 +72,8 @@ def upvote_reply(name, title, reply_id):
     if reply_vote is None:
         reply_vote = ReplyVote(vote=1, user_id=current_user.id, reply_id=reply.id)
         db.session.add(reply_vote)
+    elif abs(reply_vote.vote) == 1:
+        reply_vote.vote = 0
     else:
         reply_vote.vote = 1
     db.session.commit()
@@ -91,6 +93,8 @@ def downvote_reply(name, title, reply_id):
     if reply_vote is None:
         reply_vote = ReplyVote(vote=-1, user_id=current_user.id, reply_id=reply.id)
         db.session.add(reply_vote)
+    elif abs(reply_vote.vote) == 1:
+        reply_vote.vote = 0
     else:
         reply_vote.vote = -1
     db.session.commit()

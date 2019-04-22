@@ -26,6 +26,7 @@ def post(name, title):
         .join(Community, Post.community_id == Community.id)
         .outerjoin(PostVote, Post.id == PostVote.post_id)
         .filter(Post.title == title)
+        .filter(db.literal_column("community_name") == name)
         .group_by(Post.id)
         .first_or_404()
     )
@@ -67,6 +68,7 @@ def top_post(name, title):
         .join(Community, Post.community_id == Community.id)
         .outerjoin(PostVote, Post.id == PostVote.post_id)
         .filter(Post.title == title)
+        .filter(db.literal_column("community_name") == name)
         .group_by(Post.id)
         .first_or_404()
     )
@@ -152,6 +154,8 @@ def upvote_post(name, title):
     if post_vote is None:
         post_vote = PostVote(vote=1, user_id=current_user.id, post_id=post.id)
         db.session.add(post_vote)
+    elif abs(post_vote.vote) == 1:
+        post_vote.vote = 0
     else:
         post_vote.vote = 1
     db.session.commit()
@@ -170,6 +174,8 @@ def downvote_post(name, title):
     if post_vote is None:
         post_vote = PostVote(vote=-1, user_id=current_user.id, post_id=post.id)
         db.session.add(post_vote)
+    elif abs(post_vote.vote) == 1:
+        post_vote.vote = 0
     else:
         post_vote.vote = -1
     db.session.commit()

@@ -14,9 +14,21 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    communities = db.relationship("Community", backref="user", lazy="dynamic")
-    posts = db.relationship("Post", backref="user", lazy="dynamic")
-    replies = db.relationship("Reply", backref="user", lazy="dynamic")
+    communities = db.relationship(
+        "Community", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+    )
+    posts = db.relationship(
+        "Post", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+    )
+    replies = db.relationship(
+        "Reply", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+    )
+    post_votes = db.relationship(
+        "PostVote", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+    )
+    reply_votes = db.relationship(
+        "ReplyVote", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<User (id='{self.id}', username='{self.username}')>"
@@ -50,6 +62,9 @@ class Post(db.Model):
     replies = db.relationship(
         "Reply", backref="post", lazy="dynamic", cascade="all, delete-orphan"
     )
+    post_votes = db.relationship(
+        "PostVote", backref="post", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Post (id='{self.id}', title='{self.title}', post='{self.post}', date_created='{self.date_created}')>"
@@ -63,6 +78,9 @@ class Reply(db.Model):
     )
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
+    reply_votes = db.relationship(
+        "ReplyVote", backref="reply", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Reply (id='{self.id}', reply='{self.reply}', date_created='{self.date_created}')>"
