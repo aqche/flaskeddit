@@ -29,6 +29,9 @@ class User(db.Model, UserMixin):
     reply_votes = db.relationship(
         "ReplyVote", backref="user", lazy="dynamic", cascade="all, delete-orphan"
     )
+    community_members = db.relationship(
+        "CommunityMember", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<User (id='{self.id}', username='{self.username}')>"
@@ -44,6 +47,12 @@ class Community(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     posts = db.relationship(
         "Post", backref="community", lazy="dynamic", cascade="all, delete-orphan"
+    )
+    community_members = db.relationship(
+        "CommunityMember",
+        backref="community",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self):
@@ -105,3 +114,11 @@ class ReplyVote(db.Model):
     def __repr__(self):
         return f"<ReplyVote (id='{self.id}', vote='{self.vote}')>"
 
+
+class CommunityMember(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    community_id = db.Column(db.Integer, db.ForeignKey("community.id"), nullable=False)
+
+    def __repr__(self):
+        return f"<CommunityMember (id='{self.id}')>"
