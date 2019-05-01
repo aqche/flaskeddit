@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from flaskeddit import db
 from flaskeddit.community import community_blueprint
 from flaskeddit.community.forms import CommunityForm, UpdateCommunityForm
-from flaskeddit.models import Community, Post, PostVote, User
+from flaskeddit.models import Community, Post, PostVote, User, CommunityMember
 
 
 @community_blueprint.route("/community/<string:name>")
@@ -96,3 +96,30 @@ def delete_community(name):
     db.session.commit()
     flash("Successfully deleted community.", "primary")
     return redirect(url_for("feed.feed"))
+
+
+@community_blueprint.route("/community/<string:name>/join", methods=["POST"])
+@login_required
+def join_community(name):
+    community = Community.query.filter_by(name=name).first_or_404()
+    community_member = CommunityMember.query.filter_by(
+        community_id=community.id, user_id=current_user.id
+    ).first()
+    if community_member == None:
+        community_member = CommunityMember(community=community, user=current_user)
+        db.session.add(community_member)
+        db.session.commit()
+    return redirect(request.referer)
+
+
+@community_blueprint.route("/community/<string:name>/leave", methods=["POST"])
+@login_required
+def leave_community(name):
+    community = Community.query.filter_by(name=name).first_or_404()
+    community_member = CommunityMember.query.filter_by(
+        community_id=community.id, user_id=current_user.id
+    ).first()
+    if community_member != None:
+        db.session.delete(community_member)
+        db.session.commit()
+    return redirect(request.referer)
