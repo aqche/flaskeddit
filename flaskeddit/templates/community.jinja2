@@ -93,6 +93,27 @@
               >Post</a
             >
           </div>
+          {% if current_user.is_authenticated and community_member != None%}
+            <div class="row">
+              <form action="{{ url_for('community.leave_community', name=community.name) }}" method="POST">
+                <button
+                    class="btn btn-sm btn-primary mb-1"
+                >
+                  Leave
+                </button>
+              </form>
+            </div>
+          {% elif current_user.is_authenticated%}
+            <div class="row">
+              <form action="{{ url_for('community.join_community', name=community.name) }}" method="POST">
+                <button
+                    class="btn btn-sm btn-primary mb-1"
+                >
+                  Join
+                </button>
+              </form>
+            </div>
+          {% endif %}
           {% if current_user.is_authenticated and current_user.id == community.user_id %}
             <div class="row">
               <a
@@ -104,12 +125,12 @@
             <div class="row">
               <form action="{{ url_for('community.delete_community', name=community.name) }}" method="POST">
                 <button
-                    class="btn btn-sm btn-danger"
+                    class="btn btn-sm btn-danger mb-1"
                 >
                   Delete
                 </button>
               </form>
-            </div>       
+            </div>
           {% endif %}
         </div>
       </div>

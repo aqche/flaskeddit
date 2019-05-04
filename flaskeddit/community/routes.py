@@ -26,8 +26,18 @@ def community(name):
         .order_by(Post.date_created.desc())
         .paginate(page=page, per_page=5)
     )
+    if current_user.is_authenticated:
+        community_member = CommunityMember.query.filter_by(
+            user_id=current_user.id
+        ).first()
+    else:
+        community_member = None
     return render_template(
-        "community.jinja2", page="recent", community=community, posts=posts
+        "community.jinja2",
+        page="recent",
+        community=community,
+        posts=posts,
+        community_member=community_member,
     )
 
 
@@ -50,8 +60,18 @@ def top_community(name):
         .order_by(db.literal_column("votes").desc())
         .paginate(page=page, per_page=5)
     )
+    if current_user.is_authenticated:
+        community_member = CommunityMember.query.filter_by(
+            user_id=current_user.id
+        ).first()
+    else:
+        community_member = None
     return render_template(
-        "community.jinja2", page="top", community=community, posts=posts
+        "community.jinja2",
+        page="top",
+        community=community,
+        posts=posts,
+        community_member=community_member,
     )
 
 
@@ -109,7 +129,8 @@ def join_community(name):
         community_member = CommunityMember(community=community, user=current_user)
         db.session.add(community_member)
         db.session.commit()
-    return redirect(request.referer)
+    flash("Successfully joined community.", "primary")
+    return redirect(url_for("community.community", name=community.name))
 
 
 @community_blueprint.route("/community/<string:name>/leave", methods=["POST"])
@@ -122,4 +143,5 @@ def leave_community(name):
     if community_member != None:
         db.session.delete(community_member)
         db.session.commit()
-    return redirect(request.referer)
+    flash("Successfully left community.", "primary")
+    return redirect(url_for("community.community", name=community.name))
