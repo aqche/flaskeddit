@@ -26,7 +26,6 @@ def communities():
 
 @communities_blueprint.route("/communities/top")
 def top_communities():
-    # TODO: Update to sort by most joined
     page = int(request.args.get("page", 1))
     communities = (
         db.session.query(
