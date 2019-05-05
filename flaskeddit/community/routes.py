@@ -28,7 +28,7 @@ def community(name):
     )
     if current_user.is_authenticated:
         community_member = CommunityMember.query.filter_by(
-            user_id=current_user.id
+            community_id=community.id, user_id=current_user.id
         ).first()
     else:
         community_member = None
@@ -62,7 +62,7 @@ def top_community(name):
     )
     if current_user.is_authenticated:
         community_member = CommunityMember.query.filter_by(
-            user_id=current_user.id
+            community_id=community.id, user_id=current_user.id
         ).first()
     else:
         community_member = None

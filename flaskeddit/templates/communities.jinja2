@@ -32,8 +32,8 @@
               >Created on {{ community.date_created.strftime("%m/%d/%Y") }} by
               <a
                 class="text-muted"
-                href="{{ url_for('user.user', username=community.user.username) }}"
-                >u/{{ community.user.username }}</a
+                href="{{ url_for('user.user', username=community.username) }}"
+                >u/{{ community.username }}</a
               ></small
             >
           </h6>
