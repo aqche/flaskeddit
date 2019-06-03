@@ -1,26 +1,10 @@
+from flask import render_template
+
+from flaskeddit.models import User
 from flaskeddit.user import user_blueprint
 
 
 @user_blueprint.route("/user/<string:username>")
 def user(username):
-    return f"{username} User Profile"
-
-
-@user_blueprint.route("/user/<int:user_id>/posts")
-def user_posts(user_id):
-    return "User Posts"
-
-
-@user_blueprint.route("/user/<int:user_id>/replies")
-def user_replies(user_id):
-    return "User Replies"
-
-
-@user_blueprint.route("/user/<int:user_id>/subscriptions")
-def user_subscriptions(user_id):
-    return "User Subscriptions"
-
-
-@user_blueprint.route("/user/<int:user_id>/communities")
-def user_communities(user_id):
-    return "User Communities"
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template("user.jinja2", user=user)

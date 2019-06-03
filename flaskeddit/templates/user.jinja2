@@ -1,0 +1,9 @@
+{% extends "layout.jinja2" %} {% block content %}
+<h2 class="mb-3">User Profile</h2>
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">u/{{ user.username }}</h5>
+    <p class="card-text">Joined {{ user.date_created.strftime("%m/%d/%Y") }}.</p>
+  </div>
+</div>
+{% endblock %}

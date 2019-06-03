@@ -14,6 +14,9 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    date_created = db.Column(
+        db.DateTime, nullable=False, default=datetime.datetime.utcnow
+    )
     communities = db.relationship(
         "Community", backref="user", lazy="dynamic", cascade="all, delete-orphan"
     )
