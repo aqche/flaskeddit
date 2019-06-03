@@ -2,6 +2,19 @@
 
 A simplified Reddit clone built in Flask.
 
+## Features
+
+* Secure registration and authentication.
+* Create communities.
+* Create community posts.
+* Reply to community posts.
+* Edit or delete your communites, posts, and replies.
+* Join communities.
+* Get a feed of posts from your joined communities.
+* Upvote/downvote posts and replies.
+* Sort communites, posts, and replies by latest or most popular.
+* Basic user profiles.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development. See deployment for notes on how to deploy the project.
