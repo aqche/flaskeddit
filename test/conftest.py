@@ -3,11 +3,11 @@ import pytest
 from flaskeddit import create_app, db
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture()
 def test_client():
     app = create_app()
-    with app.app_context():
-        db.create_all()
+    app.app_context().push()
+    app.config["WTF_CSRF_ENABLED"] = False
+    db.create_all()
     yield app.test_client()
-    with app.app_context():
-        db.drop_all()
+    db.drop_all()
