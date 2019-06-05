@@ -4,11 +4,15 @@
     {% if page == "recent" %}
       <li class="breadcrumb-item active" aria-current="page">Recent</li>
       <li class="breadcrumb-item">
-        <a href="{{ url_for('community.top_community', name=community.name) }}">Top</a>
+        <a href="{{ url_for('community.top_community', name=community.name) }}"
+          >Top</a
+        >
       </li>
     {% elif page == "top" %}
       <li class="breadcrumb-item">
-        <a href="{{ url_for('community.community', name=community.name) }}">Recent</a>
+        <a href="{{ url_for('community.community', name=community.name) }}"
+          >Recent</a
+        >
       </li>
       <li class="breadcrumb-item active" aria-current="page">Top</li>
     {% endif %}
@@ -23,15 +27,35 @@
           <div class="col-2">
             <ul class="list-group text-center border-0">
               <li class="list-group-item py-1 border-0">
-                <form action="{{ url_for('post.upvote_post', name=community.name, title=post.title) }}" method="POST">
-                  <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
+                <form
+                  action="{{ url_for('post.upvote_post', name=community.name, title=post.title) }}"
+                  method="POST"
+                >
+                  <small
+                    ><input
+                      class="border-0"
+                      type="submit"
+                      value="▲"
+                      {% if not current_user.is_authenticated %}disabled{% endif %}
+                  /></small>
                 </form>
               </li>
-              <li class="list-group-item py-1 border-0"><small>{{ post.votes }}</small></li>
               <li class="list-group-item py-1 border-0">
-                <form action="{{ url_for('post.downvote_post', name=community.name, title=post.title) }}" method="POST">
-                  <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
-                </form>      
+                <small>{{ post.votes }}</small>
+              </li>
+              <li class="list-group-item py-1 border-0">
+                <form
+                  action="{{ url_for('post.downvote_post', name=community.name, title=post.title) }}"
+                  method="POST"
+                >
+                  <small
+                    ><input
+                      class="border-0"
+                      type="submit"
+                      value="▼"
+                      {% if not current_user.is_authenticated %}disabled{% endif %}
+                  /></small>
+                </form>
               </li>
             </ul>
           </div>
@@ -63,11 +87,9 @@
       <ul class="pagination">
         {% if posts.prev_num %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ posts.prev_num }}"
-              >Previous</a
-            >
+            <a class="page-link" href="?page={{ posts.prev_num }}">Previous</a>
           </li>
-        {% endif %}
+        {% endif %} 
         {% if posts.next_num %}
           <li class="page-item">
             <a class="page-link" href="?page={{ posts.next_num }}">Next</a>
@@ -93,27 +115,29 @@
               >Post</a
             >
           </div>
-          {% if current_user.is_authenticated and community_member != None%}
+          {% if current_user.is_authenticated and community_member != None %}
             <div class="row">
-              <form action="{{ url_for('community.leave_community', name=community.name) }}" method="POST">
-                <button
-                    class="btn btn-sm btn-primary mb-1"
-                >
+              <form
+                action="{{ url_for('community.leave_community', name=community.name) }}"
+                method="POST"
+              >
+                <button class="btn btn-sm btn-primary mb-1">
                   Leave
                 </button>
               </form>
             </div>
-          {% elif current_user.is_authenticated%}
+          {% elif current_user.is_authenticated %}
             <div class="row">
-              <form action="{{ url_for('community.join_community', name=community.name) }}" method="POST">
-                <button
-                    class="btn btn-sm btn-primary mb-1"
-                >
+              <form
+                action="{{ url_for('community.join_community', name=community.name) }}"
+                method="POST"
+              >
+                <button class="btn btn-sm btn-primary mb-1">
                   Join
                 </button>
               </form>
             </div>
-          {% endif %}
+          {% endif %} 
           {% if current_user.is_authenticated and current_user.id == community.user_id %}
             <div class="row">
               <a
@@ -123,10 +147,11 @@
               >
             </div>
             <div class="row">
-              <form action="{{ url_for('community.delete_community', name=community.name) }}" method="POST">
-                <button
-                    class="btn btn-sm btn-danger mb-1"
-                >
+              <form
+                action="{{ url_for('community.delete_community', name=community.name) }}"
+                method="POST"
+              >
+                <button class="btn btn-sm btn-danger mb-1">
                   Delete
                 </button>
               </form>

@@ -7,15 +7,35 @@
         <div class="col-2">
           <ul class="list-group text-center border-0">
             <li class="list-group-item py-1 my-1 border-0">
-              <form action="{{ url_for('post.upvote_post', name=post.community_name, title=post.title) }}" method="POST">
-                <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
+              <form
+                action="{{ url_for('post.upvote_post', name=post.community_name, title=post.title) }}"
+                method="POST"
+              >
+                <small
+                  ><input
+                    class="border-0"
+                    type="submit"
+                    value="▲"
+                    {% if not current_user.is_authenticated %}disabled{% endif %}
+                /></small>
               </form>
             </li>
-            <li class="list-group-item py-1 my-1 border-0"><small>{{ post.votes }}</small></li>
             <li class="list-group-item py-1 my-1 border-0">
-              <form action="{{ url_for('post.downvote_post', name=post.community_name, title=post.title) }}" method="POST">
-                <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
-              </form>    
+              <small>{{ post.votes }}</small>
+            </li>
+            <li class="list-group-item py-1 my-1 border-0">
+              <form
+                action="{{ url_for('post.downvote_post', name=post.community_name, title=post.title) }}"
+                method="POST"
+              >
+                <small
+                  ><input
+                    class="border-0"
+                    type="submit"
+                    value="▼"
+                    {% if not current_user.is_authenticated %}disabled{% endif %}
+                /></small>
+              </form>
             </li>
           </ul>
         </div>
@@ -32,8 +52,7 @@
                   href="{{ url_for('user.user', username=post.username) }}"
                   >u/{{ post.username }}</a
                 >
-                </small
-              >
+              </small>
             </h6>
             <p class="card-text">
               {{ post.post }}
@@ -65,15 +84,35 @@
           <div class="col-2">
             <ul class="list-group text-center border-0">
               <li class="list-group-item py-1 border-0">
-                <form action="{{ url_for('reply.upvote_reply', name=post.community_name, title=post.title, reply_id=reply.id) }}" method="POST">
-                  <small><input class="border-0" type="submit" value="▲" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
+                <form
+                  action="{{ url_for('reply.upvote_reply', name=post.community_name, title=post.title, reply_id=reply.id) }}"
+                  method="POST"
+                >
+                  <small
+                    ><input
+                      class="border-0"
+                      type="submit"
+                      value="▲"
+                      {% if not current_user.is_authenticated %}disabled{% endif %}
+                  /></small>
                 </form>
               </li>
-              <li class="list-group-item py-1 border-0"><small>{{ reply.votes }}</small></li>
               <li class="list-group-item py-1 border-0">
-                <form action="{{ url_for('reply.downvote_reply', name=post.community_name, title=post.title, reply_id=reply.id) }}" method="POST">
-                  <small><input class="border-0" type="submit" value="▼" {% if not current_user.is_authenticated %}disabled{% endif %}></small>
-                </form>              
+                <small>{{ reply.votes }}</small>
+              </li>
+              <li class="list-group-item py-1 border-0">
+                <form
+                  action="{{ url_for('reply.downvote_reply', name=post.community_name, title=post.title, reply_id=reply.id) }}"
+                  method="POST"
+                >
+                  <small
+                    ><input
+                      class="border-0"
+                      type="submit"
+                      value="▼"
+                      {% if not current_user.is_authenticated %}disabled{% endif %}
+                  /></small>
+                </form>
               </li>
             </ul>
           </div>
@@ -90,15 +129,15 @@
                     href="{{ url_for('user.user', username=reply.username) }}"
                     >u/{{ reply.username }}</a
                   >
-                  {% if current_user.is_authenticated and current_user.id == reply.user_id %}
-                    &#183; <a
+                  {% if current_user.is_authenticated and current_user.id == reply.user_id %} 
+                    &#183;
+                    <a
                       class="text-muted"
                       href="{{ url_for('reply.update_reply', name=post.community_name, title=post.title, reply_id=reply.id) }}"
                       >Edit</a
-                    >       
+                    >
                   {% endif %}
-                  </small
-                >
+                </small>
               </h6>
             </div>
           </div>
@@ -109,9 +148,7 @@
       <ul class="pagination">
         {% if replies.prev_num %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ replies.prev_num }}"
-              >Previous</a
-            >
+            <a class="page-link" href="?page={{ replies.prev_num }}">Previous</a>
           </li>
         {% endif %} 
         {% if replies.next_num %}
