@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from flaskeddit import db
 from flaskeddit.community import community_blueprint
 from flaskeddit.community.forms import CommunityForm, UpdateCommunityForm
-from flaskeddit.models import Community, Post, PostVote, User, CommunityMember
+from flaskeddit.models import Community, CommunityMember, Post, PostVote, User
 
 
 @community_blueprint.route("/community/<string:name>")

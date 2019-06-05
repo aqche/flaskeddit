@@ -1,5 +1,3 @@
-from flask_login import login_user
-
 from flaskeddit import bcrypt, db
 from flaskeddit.models import User
 

@@ -3,7 +3,7 @@ from flask_login import current_user
 
 from flaskeddit import db
 from flaskeddit.feed import feed_blueprint
-from flaskeddit.models import Post, PostVote, User, CommunityMember, Community
+from flaskeddit.models import Community, CommunityMember, Post, PostVote, User
 
 
 @feed_blueprint.route("/")

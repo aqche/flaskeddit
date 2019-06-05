@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flaskeddit.config import Config
 
-
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
