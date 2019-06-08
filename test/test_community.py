@@ -5,14 +5,14 @@ from flaskeddit.models import Community, User
 class TestCommunity:
     def test_get_community(self, test_client):
         user = User(username="mockusername", password="mockpassword")
-        commuity = Community(
+        community = Community(
             name="mockcommunity", description="mockdescription", user=user
         )
         db.session.add(user)
-        db.session.add(commuity)
+        db.session.add(community)
         db.session.commit()
 
-        response = test_client.get(f"/community/{commuity.name}")
+        response = test_client.get(f"/community/{community.name}")
 
         assert response is not None
         assert response.status_code == 200
@@ -20,14 +20,14 @@ class TestCommunity:
 
     def test_get_top_community(self, test_client):
         user = User(username="mockusername", password="mockpassword")
-        commuity = Community(
+        community = Community(
             name="mockcommunity", description="mockdescription", user=user
         )
         db.session.add(user)
-        db.session.add(commuity)
+        db.session.add(community)
         db.session.commit()
 
-        response = test_client.get(f"/community/{commuity.name}/top")
+        response = test_client.get(f"/community/{community.name}/top")
 
         assert response is not None
         assert response.status_code == 200
@@ -74,11 +74,11 @@ class TestCommunity:
     def test_get_update_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         user = User(username="mockusername", password=hashed_password)
-        commuity = Community(
+        community = Community(
             name="mockcommunity", description="mockdescription", user=user
         )
         db.session.add(user)
-        db.session.add(commuity)
+        db.session.add(community)
         db.session.commit()
         test_client.post(
             "/login",
@@ -86,7 +86,7 @@ class TestCommunity:
             follow_redirects=True,
         )
 
-        response = test_client.get(f"/community/{commuity.name}/update")
+        response = test_client.get(f"/community/{community.name}/update")
 
         assert response is not None
         assert response.status_code == 200
@@ -95,11 +95,11 @@ class TestCommunity:
     def test_post_update_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         user = User(username="mockusername", password=hashed_password)
-        commuity = Community(
+        community = Community(
             name="mockcommunity", description="mockdescription", user=user
         )
         db.session.add(user)
-        db.session.add(commuity)
+        db.session.add(community)
         db.session.commit()
         test_client.post(
             "/login",
@@ -108,7 +108,7 @@ class TestCommunity:
         )
 
         response = test_client.post(
-            f"/community/{commuity.name}/update",
+            f"/community/{community.name}/update",
             data={"description": "mockupdateddescription"},
             follow_redirects=True,
         )
@@ -120,11 +120,11 @@ class TestCommunity:
     def test_post_delete_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         user = User(username="mockusername", password=hashed_password)
-        commuity = Community(
+        community = Community(
             name="mockcommunity", description="mockdescription", user=user
         )
         db.session.add(user)
-        db.session.add(commuity)
+        db.session.add(community)
         db.session.commit()
         test_client.post(
             "/login",
@@ -133,7 +133,7 @@ class TestCommunity:
         )
 
         response = test_client.post(
-            f"/community/{commuity.name}/delete", follow_redirects=True
+            f"/community/{community.name}/delete", follow_redirects=True
         )
 
         assert response is not None
@@ -143,11 +143,11 @@ class TestCommunity:
     def test_post_join_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         user = User(username="mockusername", password=hashed_password)
-        commuity = Community(
+        community = Community(
             name="mockcommunity", description="mockdescription", user=user
         )
         db.session.add(user)
-        db.session.add(commuity)
+        db.session.add(community)
         db.session.commit()
         test_client.post(
             "/login",
@@ -156,7 +156,7 @@ class TestCommunity:
         )
 
         response = test_client.post(
-            f"/community/{commuity.name}/join", follow_redirects=True
+            f"/community/{community.name}/join", follow_redirects=True
         )
 
         assert response is not None
@@ -166,11 +166,11 @@ class TestCommunity:
     def test_post_leave_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         user = User(username="mockusername", password=hashed_password)
-        commuity = Community(
+        community = Community(
             name="mockcommunity", description="mockdescription", user=user
         )
         db.session.add(user)
-        db.session.add(commuity)
+        db.session.add(community)
         db.session.commit()
         test_client.post(
             "/login",
@@ -179,7 +179,7 @@ class TestCommunity:
         )
 
         response = test_client.post(
-            f"/community/{commuity.name}/leave", follow_redirects=True
+            f"/community/{community.name}/leave", follow_redirects=True
         )
 
         assert response is not None
