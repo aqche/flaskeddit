@@ -48,12 +48,6 @@ class TestAuth:
         assert response.status_code == 200
         assert b"Successfully logged in" in response.data
 
-    def test_get_logout(self, test_client):
-        response = test_client.get("/logout")
-
-        assert response is not None
-        assert response.status_code == 405
-
     def test_post_logout(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         user = User(username="mockusername", password=hashed_password)

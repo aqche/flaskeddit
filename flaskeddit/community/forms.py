@@ -1,6 +1,6 @@
 import re
 
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError
 
@@ -8,7 +8,7 @@ from flaskeddit import db
 from flaskeddit.models import Community
 
 
-class CommunityForm(Form):
+class CommunityForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
     submit = SubmitField("Create")
@@ -24,6 +24,6 @@ class CommunityForm(Form):
             raise ValidationError("Name is already taken.")
 
 
-class UpdateCommunityForm(Form):
+class UpdateCommunityForm(FlaskForm):
     description = TextAreaField("Description", validators=[DataRequired()])
     submit = SubmitField("Update")
