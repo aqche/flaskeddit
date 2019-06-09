@@ -1,14 +1,14 @@
 from flaskeddit import db
-from flaskeddit.models import Community, User
+from flaskeddit.models import AppUser, Community
 
 
 class TestCommunities:
     def test_get_communities(self, test_client):
-        user = User(username="mockusername", password="mockpassword")
+        app_user = AppUser(username="mockusername", password="mockpassword")
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
 
@@ -19,11 +19,11 @@ class TestCommunities:
         assert b"mockcommunity" in response.data
 
     def test_get_top_communities(self, test_client):
-        user = User(username="mockusername", password="mockpassword")
+        app_user = AppUser(username="mockusername", password="mockpassword")
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
 

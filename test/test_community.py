@@ -1,14 +1,14 @@
 from flaskeddit import bcrypt, db
-from flaskeddit.models import Community, User
+from flaskeddit.models import AppUser, Community
 
 
 class TestCommunity:
     def test_get_community(self, test_client):
-        user = User(username="mockusername", password="mockpassword")
+        app_user = AppUser(username="mockusername", password="mockpassword")
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
 
@@ -19,11 +19,11 @@ class TestCommunity:
         assert b"mockcommunity" in response.data
 
     def test_get_top_community(self, test_client):
-        user = User(username="mockusername", password="mockpassword")
+        app_user = AppUser(username="mockusername", password="mockpassword")
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
 
@@ -35,8 +35,8 @@ class TestCommunity:
 
     def test_get_create_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
-        db.session.add(user)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        db.session.add(app_user)
         db.session.commit()
         test_client.post(
             "/login",
@@ -52,8 +52,8 @@ class TestCommunity:
 
     def test_post_create_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
-        db.session.add(user)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        db.session.add(app_user)
         db.session.commit()
         test_client.post(
             "/login",
@@ -73,11 +73,11 @@ class TestCommunity:
 
     def test_get_update_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
         test_client.post(
@@ -94,11 +94,11 @@ class TestCommunity:
 
     def test_post_update_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
         test_client.post(
@@ -119,11 +119,11 @@ class TestCommunity:
 
     def test_post_delete_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
         test_client.post(
@@ -142,11 +142,11 @@ class TestCommunity:
 
     def test_post_join_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
         test_client.post(
@@ -165,11 +165,11 @@ class TestCommunity:
 
     def test_post_leave_community(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.commit()
         test_client.post(

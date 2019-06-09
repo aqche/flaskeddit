@@ -3,7 +3,7 @@ from flask_login import current_user
 
 from flaskeddit import db
 from flaskeddit.feed import feed_blueprint
-from flaskeddit.models import Community, CommunityMember, Post, PostVote, User
+from flaskeddit.models import AppUser, Community, CommunityMember, Post, PostVote
 
 
 @feed_blueprint.route("/")
@@ -17,11 +17,11 @@ def feed():
                 Post.post,
                 Post.date_created,
                 db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
-                User.username,
+                AppUser.username,
                 Community.name.label("community_name"),
             )
             .outerjoin(PostVote, Post.id == PostVote.post_id)
-            .join(User, Post.user_id == User.id)
+            .join(AppUser, Post.user_id == AppUser.id)
             .join(Community, Post.community_id == Community.id)
             .join(CommunityMember, Post.community_id == CommunityMember.community_id)
             .filter(CommunityMember.user_id == current_user.id)
@@ -44,11 +44,11 @@ def top_feed():
                 Post.post,
                 Post.date_created,
                 db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
-                User.username,
+                AppUser.username,
                 Community.name.label("community_name"),
             )
             .outerjoin(PostVote, Post.id == PostVote.post_id)
-            .join(User, Post.user_id == User.id)
+            .join(AppUser, Post.user_id == AppUser.id)
             .join(Community, Post.community_id == Community.id)
             .join(CommunityMember, Post.community_id == CommunityMember.community_id)
             .filter(CommunityMember.user_id == current_user.id)

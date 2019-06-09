@@ -1,19 +1,22 @@
 from flaskeddit import bcrypt, db
-from flaskeddit.models import Community, CommunityMember, Post, User
+from flaskeddit.models import AppUser, Community, CommunityMember, Post
 
 
 class TestFeed:
     def test_get_feed(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        community_member = CommunityMember(user=user, community=community)
+        community_member = CommunityMember(app_user=app_user, community=community)
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(community_member)
         db.session.add(post)
@@ -32,15 +35,18 @@ class TestFeed:
 
     def test_get_top_feed(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
-        community_member = CommunityMember(user=user, community=community)
+        community_member = CommunityMember(app_user=app_user, community=community)
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(community_member)
         db.session.add(post)

@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit import db
-from flaskeddit.models import Community, Post, PostVote, Reply, ReplyVote, User
+from flaskeddit.models import AppUser, Community, Post, PostVote, Reply, ReplyVote
 from flaskeddit.post import post_blueprint
 from flaskeddit.post.forms import PostForm, UpdatePostForm
 
@@ -18,11 +18,11 @@ def post(name, title):
             Post.date_created,
             Post.user_id,
             db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
-            User.username,
+            AppUser.username,
             Community.name.label("community_name"),
             Community.description.label("community_description"),
         )
-        .join(User, Post.user_id == User.id)
+        .join(AppUser, Post.user_id == AppUser.id)
         .join(Community, Post.community_id == Community.id)
         .outerjoin(PostVote, Post.id == PostVote.post_id)
         .filter(Post.title == title)
@@ -37,9 +37,9 @@ def post(name, title):
             Reply.user_id,
             Reply.date_created,
             db.func.ifnull(db.func.sum(ReplyVote.vote), 0).label("votes"),
-            User.username,
+            AppUser.username,
         )
-        .join(User, Reply.user_id == User.id)
+        .join(AppUser, Reply.user_id == AppUser.id)
         .outerjoin(ReplyVote, Reply.id == ReplyVote.reply_id)
         .filter(Reply.post_id == post.id)
         .group_by(Reply.id)
@@ -60,11 +60,11 @@ def top_post(name, title):
             Post.date_created,
             Post.user_id,
             db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
-            User.username,
+            AppUser.username,
             Community.name.label("community_name"),
             Community.description.label("community_description"),
         )
-        .join(User, Post.user_id == User.id)
+        .join(AppUser, Post.user_id == AppUser.id)
         .join(Community, Post.community_id == Community.id)
         .outerjoin(PostVote, Post.id == PostVote.post_id)
         .filter(Post.title == title)
@@ -79,9 +79,9 @@ def top_post(name, title):
             Reply.user_id,
             Reply.date_created,
             db.func.ifnull(db.func.sum(ReplyVote.vote), 0).label("votes"),
-            User.username,
+            AppUser.username,
         )
-        .join(User, Reply.user_id == User.id)
+        .join(AppUser, Reply.user_id == AppUser.id)
         .outerjoin(ReplyVote, Reply.id == ReplyVote.reply_id)
         .filter(Reply.post_id == post.id)
         .group_by(Reply.id)
@@ -102,7 +102,7 @@ def create_post(name):
             title=form.title.data,
             post=form.post.data,
             community=community,
-            user=current_user,
+            app_user=current_user,
         )
         db.session.add(post)
         db.session.commit()

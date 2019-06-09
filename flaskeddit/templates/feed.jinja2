@@ -70,7 +70,7 @@
                     >Posted on {{ post.date_created.strftime("%m/%d/%Y") }} by
                     <a
                       class="text-muted"
-                      href="{{ url_for('user.user', username=post.username) }}"
+                      href="{{ url_for('user.app_user', username=post.username) }}"
                       >u/{{ post.username }}</a
                     ></small
                   >

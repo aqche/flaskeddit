@@ -1,1 +1,1 @@
-web: gunicorn "flaskeddit:create_app()"
+web: export FLASK_APP=flaskeddit.py && flask cli create_db && gunicorn "flaskeddit:create_app()"

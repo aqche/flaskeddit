@@ -2,7 +2,7 @@ from flask import render_template, request
 
 from flaskeddit import db
 from flaskeddit.communities import communities_blueprint
-from flaskeddit.models import Community, CommunityMember, User
+from flaskeddit.models import AppUser, Community, CommunityMember
 
 
 @communities_blueprint.route("/communities")
@@ -15,9 +15,9 @@ def communities():
             Community.description,
             Community.date_created,
             Community.user_id,
-            User.username,
+            AppUser.username,
         )
-        .join(User, Community.user_id == User.id)
+        .join(AppUser, Community.user_id == AppUser.id)
         .order_by(Community.date_created.desc())
         .paginate(page=page, per_page=5)
     )
@@ -34,14 +34,13 @@ def top_communities():
             Community.description,
             Community.date_created,
             Community.user_id,
-            User.username,
+            AppUser.username,
             db.func.count(CommunityMember.id).label("community_members"),
         )
-        .join(User, Community.user_id == User.id)
+        .join(AppUser, Community.user_id == AppUser.id)
         .outerjoin(CommunityMember, Community.id == CommunityMember.community_id)
         .group_by(Community.id)
         .order_by(db.literal_column("community_members").desc())
         .paginate(page=page, per_page=5)
     )
-    print(communities.items)
     return render_template("communities.jinja2", page="top", communities=communities)

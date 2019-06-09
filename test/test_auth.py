@@ -1,5 +1,5 @@
 from flaskeddit import bcrypt, db
-from flaskeddit.models import User
+from flaskeddit.models import AppUser
 
 
 class TestAuth:
@@ -34,8 +34,8 @@ class TestAuth:
 
     def test_post_login(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
-        db.session.add(user)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        db.session.add(app_user)
         db.session.commit()
 
         response = test_client.post(
@@ -50,8 +50,8 @@ class TestAuth:
 
     def test_post_logout(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
-        db.session.add(user)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        db.session.add(app_user)
         db.session.commit()
         test_client.post(
             "/login",

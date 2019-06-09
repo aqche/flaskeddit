@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from flaskeddit import db
 from flaskeddit.community import community_blueprint
 from flaskeddit.community.forms import CommunityForm, UpdateCommunityForm
-from flaskeddit.models import Community, CommunityMember, Post, PostVote, User
+from flaskeddit.models import AppUser, Community, CommunityMember, Post, PostVote
 
 
 @community_blueprint.route("/community/<string:name>")
@@ -17,10 +17,10 @@ def community(name):
             Post.post,
             Post.date_created,
             db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
-            User.username,
+            AppUser.username,
         )
         .outerjoin(PostVote, Post.id == PostVote.post_id)
-        .join(User, Post.user_id == User.id)
+        .join(AppUser, Post.user_id == AppUser.id)
         .filter(Post.community_id == community.id)
         .group_by(Post.id)
         .order_by(Post.date_created.desc())
@@ -51,10 +51,10 @@ def top_community(name):
             Post.post,
             Post.date_created,
             db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
-            User.username,
+            AppUser.username,
         )
         .outerjoin(PostVote, Post.id == PostVote.post_id)
-        .join(User, Post.user_id == User.id)
+        .join(AppUser, Post.user_id == AppUser.id)
         .filter(Post.community_id == community.id)
         .group_by(Post.id)
         .order_by(db.literal_column("votes").desc())
@@ -81,7 +81,9 @@ def create_community():
     form = CommunityForm()
     if form.validate_on_submit():
         community = Community(
-            name=form.name.data, description=form.description.data, user=current_user
+            name=form.name.data,
+            description=form.description.data,
+            app_user=current_user,
         )
         db.session.add(community)
         db.session.commit()
@@ -126,7 +128,7 @@ def join_community(name):
         community_id=community.id, user_id=current_user.id
     ).first()
     if community_member == None:
-        community_member = CommunityMember(community=community, user=current_user)
+        community_member = CommunityMember(community=community, app_user=current_user)
         db.session.add(community_member)
         db.session.commit()
     flash("Successfully joined community.", "primary")

@@ -21,7 +21,7 @@ def reply(name, title):
     )
     form = ReplyForm()
     if form.validate_on_submit():
-        reply = Reply(reply=form.reply.data, post=post, user=current_user)
+        reply = Reply(reply=form.reply.data, post=post, app_user=current_user)
         db.session.add(reply)
         db.session.commit()
         flash("Successfully created reply.", "primary")

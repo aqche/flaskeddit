@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, EqualTo, Length
 
-from flaskeddit.models import User
+from flaskeddit.models import AppUser
 
 
 class RegisterForm(FlaskForm):
@@ -21,8 +21,8 @@ class RegisterForm(FlaskForm):
     submit = SubmitField("Register")
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data.lower()).first()
-        if user is not None:
+        app_user = AppUser.query.filter_by(username=username.data.lower()).first()
+        if app_user is not None:
             raise ValidationError("Username is taken.")
 
     def validate_password(self, password):

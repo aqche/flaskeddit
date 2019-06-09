@@ -32,7 +32,7 @@
               >Created on {{ community.date_created.strftime("%m/%d/%Y") }} by
               <a
                 class="text-muted"
-                href="{{ url_for('user.user', username=community.username) }}"
+                href="{{ url_for('user.app_user', username=community.username) }}"
                 >u/{{ community.username }}</a
               ></small
             >

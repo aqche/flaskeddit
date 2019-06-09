@@ -13,7 +13,7 @@ A simplified Reddit clone built in Flask.
 * Get a feed of posts from your joined communities.
 * Upvote or downvote posts and replies.
 * Sort communites, posts, and replies by latest or most popular.
-* Basic user profiles.
+* Basic app_user profiles.
  
 ## Getting Started
 

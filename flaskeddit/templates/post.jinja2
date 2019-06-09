@@ -49,7 +49,7 @@
                 >Posted on {{ post.date_created.strftime("%m/%d/%Y") }} by
                 <a
                   class="text-muted"
-                  href="{{ url_for('user.user', username=post.username) }}"
+                  href="{{ url_for('user.app_user', username=post.username) }}"
                   >u/{{ post.username }}</a
                 >
               </small>
@@ -126,7 +126,7 @@
                   >Replied on {{ reply.date_created.strftime("%m/%d/%Y") }} by
                   <a
                     class="text-muted"
-                    href="{{ url_for('user.user', username=reply.username) }}"
+                    href="{{ url_for('user.app_user', username=reply.username) }}"
                     >u/{{ reply.username }}</a
                   >
                   {% if current_user.is_authenticated and current_user.id == reply.user_id %} 

@@ -7,10 +7,10 @@ from flaskeddit import db, login_manager
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    return AppUser.query.get(user_id)
 
 
-class User(db.Model, UserMixin):
+class AppUser(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
@@ -18,26 +18,29 @@ class User(db.Model, UserMixin):
         db.DateTime, nullable=False, default=datetime.datetime.utcnow
     )
     communities = db.relationship(
-        "Community", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+        "Community", backref="app_user", lazy="dynamic", cascade="all, delete-orphan"
     )
     posts = db.relationship(
-        "Post", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+        "Post", backref="app_user", lazy="dynamic", cascade="all, delete-orphan"
     )
     replies = db.relationship(
-        "Reply", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+        "Reply", backref="app_user", lazy="dynamic", cascade="all, delete-orphan"
     )
     post_votes = db.relationship(
-        "PostVote", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+        "PostVote", backref="app_user", lazy="dynamic", cascade="all, delete-orphan"
     )
     reply_votes = db.relationship(
-        "ReplyVote", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+        "ReplyVote", backref="app_user", lazy="dynamic", cascade="all, delete-orphan"
     )
     community_members = db.relationship(
-        "CommunityMember", backref="user", lazy="dynamic", cascade="all, delete-orphan"
+        "CommunityMember",
+        backref="app_user",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self):
-        return f"<User (id='{self.id}', username='{self.username}')>"
+        return f"<AppUser (id='{self.id}', username='{self.username}')>"
 
 
 class Community(db.Model):
@@ -47,7 +50,7 @@ class Community(db.Model):
     date_created = db.Column(
         db.DateTime, nullable=False, default=datetime.datetime.utcnow
     )
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     posts = db.relationship(
         "Post", backref="community", lazy="dynamic", cascade="all, delete-orphan"
     )
@@ -69,7 +72,7 @@ class Post(db.Model):
     date_created = db.Column(
         db.DateTime, nullable=False, default=datetime.datetime.utcnow
     )
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     community_id = db.Column(db.Integer, db.ForeignKey("community.id"), nullable=False)
     replies = db.relationship(
         "Reply", backref="post", lazy="dynamic", cascade="all, delete-orphan"
@@ -88,7 +91,7 @@ class Reply(db.Model):
     date_created = db.Column(
         db.DateTime, nullable=False, default=datetime.datetime.utcnow
     )
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
     reply_votes = db.relationship(
         "ReplyVote", backref="reply", lazy="dynamic", cascade="all, delete-orphan"
@@ -101,7 +104,7 @@ class Reply(db.Model):
 class PostVote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     vote = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=False)
 
     def __repr__(self):
@@ -111,7 +114,7 @@ class PostVote(db.Model):
 class ReplyVote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     vote = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     reply_id = db.Column(db.Integer, db.ForeignKey("reply.id"), nullable=False)
 
     def __repr__(self):
@@ -120,7 +123,7 @@ class ReplyVote(db.Model):
 
 class CommunityMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     community_id = db.Column(db.Integer, db.ForeignKey("community.id"), nullable=False)
 
     def __repr__(self):

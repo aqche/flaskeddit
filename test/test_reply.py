@@ -1,18 +1,21 @@
 from flaskeddit import bcrypt, db
-from flaskeddit.models import Community, Post, Reply, ReplyVote, User
+from flaskeddit.models import AppUser, Community, Post, Reply, ReplyVote
 
 
 class TestReply:
     def test_get_reply(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(post)
         db.session.commit()
@@ -32,14 +35,17 @@ class TestReply:
 
     def test_post_reply(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        db.session.add(user)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(post)
         db.session.commit()
@@ -61,15 +67,18 @@ class TestReply:
 
     def test_get_update_reply(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        reply = Reply(reply="mockreply", user=user, post=post)
-        db.session.add(user)
+        reply = Reply(reply="mockreply", app_user=app_user, post=post)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(post)
         db.session.add(reply)
@@ -90,15 +99,18 @@ class TestReply:
 
     def test_post_update_reply(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        reply = Reply(reply="mockreply", user=user, post=post)
-        db.session.add(user)
+        reply = Reply(reply="mockreply", app_user=app_user, post=post)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(post)
         db.session.add(reply)
@@ -121,15 +133,18 @@ class TestReply:
 
     def test_post_delete_reply(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        reply = Reply(reply="mockreply", user=user, post=post)
-        db.session.add(user)
+        reply = Reply(reply="mockreply", app_user=app_user, post=post)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(post)
         db.session.add(reply)
@@ -151,15 +166,18 @@ class TestReply:
 
     def test_post_upvote_reply(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        reply = Reply(reply="mockreply", user=user, post=post)
-        db.session.add(user)
+        reply = Reply(reply="mockreply", app_user=app_user, post=post)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(post)
         db.session.add(reply)
@@ -177,22 +195,25 @@ class TestReply:
         assert response is not None
         assert response.status_code == 302
         reply_vote = ReplyVote.query.filter_by(
-            user_id=user.id, reply_id=reply.id
+            user_id=app_user.id, reply_id=reply.id
         ).first()
         assert reply_vote is not None
         assert reply_vote.vote == 1
 
     def test_post_downvote_reply(self, test_client):
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        user = User(username="mockusername", password=hashed_password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
-            name="mockcommunity", description="mockdescription", user=user
+            name="mockcommunity", description="mockdescription", app_user=app_user
         )
         post = Post(
-            title="mockposttitle", post="mockpost", user=user, community=community
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
         )
-        reply = Reply(reply="mockreply", user=user, post=post)
-        db.session.add(user)
+        reply = Reply(reply="mockreply", app_user=app_user, post=post)
+        db.session.add(app_user)
         db.session.add(community)
         db.session.add(post)
         db.session.add(reply)
@@ -210,7 +231,7 @@ class TestReply:
         assert response is not None
         assert response.status_code == 302
         reply_vote = ReplyVote.query.filter_by(
-            user_id=user.id, reply_id=reply.id
+            user_id=app_user.id, reply_id=reply.id
         ).first()
         assert reply_vote is not None
         assert reply_vote.vote == -1
