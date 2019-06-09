@@ -129,7 +129,7 @@ def update_post(name, title):
     if form.validate_on_submit():
         post.post = form.post.data
         db.session.commit()
-        flash("Successfully updated community.", "primary")
+        flash("Successfully updated post.", "primary")
         return redirect(url_for("post.post", name=name, title=title))
     form.post.data = post.post
     return render_template("update_post.jinja2", name=name, title=title, form=form)
