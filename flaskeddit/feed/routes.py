@@ -16,7 +16,7 @@ def feed():
                 Post.title,
                 Post.post,
                 Post.date_created,
-                db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
+                db.func.coalesce(db.func.sum(PostVote.vote), 0).label("votes"),
                 AppUser.username,
                 Community.name.label("community_name"),
             )
@@ -43,7 +43,7 @@ def top_feed():
                 Post.title,
                 Post.post,
                 Post.date_created,
-                db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
+                db.func.coalesce(db.func.sum(PostVote.vote), 0).label("votes"),
                 AppUser.username,
                 Community.name.label("community_name"),
             )

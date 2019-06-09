@@ -17,7 +17,7 @@ def post(name, title):
             Post.post,
             Post.date_created,
             Post.user_id,
-            db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
+            db.func.coalesce(db.func.sum(PostVote.vote), 0).label("votes"),
             AppUser.username,
             Community.name.label("community_name"),
             Community.description.label("community_description"),
@@ -36,7 +36,7 @@ def post(name, title):
             Reply.reply,
             Reply.user_id,
             Reply.date_created,
-            db.func.ifnull(db.func.sum(ReplyVote.vote), 0).label("votes"),
+            db.func.coalesce(db.func.sum(ReplyVote.vote), 0).label("votes"),
             AppUser.username,
         )
         .join(AppUser, Reply.user_id == AppUser.id)
@@ -59,7 +59,7 @@ def top_post(name, title):
             Post.post,
             Post.date_created,
             Post.user_id,
-            db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
+            db.func.coalesce(db.func.sum(PostVote.vote), 0).label("votes"),
             AppUser.username,
             Community.name.label("community_name"),
             Community.description.label("community_description"),
@@ -78,7 +78,7 @@ def top_post(name, title):
             Reply.reply,
             Reply.user_id,
             Reply.date_created,
-            db.func.ifnull(db.func.sum(ReplyVote.vote), 0).label("votes"),
+            db.func.coalesce(db.func.sum(ReplyVote.vote), 0).label("votes"),
             AppUser.username,
         )
         .join(AppUser, Reply.user_id == AppUser.id)

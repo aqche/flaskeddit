@@ -16,7 +16,7 @@ def community(name):
             Post.title,
             Post.post,
             Post.date_created,
-            db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
+            db.func.coalesce(db.func.sum(PostVote.vote), 0).label("votes"),
             AppUser.username,
         )
         .outerjoin(PostVote, Post.id == PostVote.post_id)
@@ -50,7 +50,7 @@ def top_community(name):
             Post.title,
             Post.post,
             Post.date_created,
-            db.func.ifnull(db.func.sum(PostVote.vote), 0).label("votes"),
+            db.func.coalesce(db.func.sum(PostVote.vote), 0).label("votes"),
             AppUser.username,
         )
         .outerjoin(PostVote, Post.id == PostVote.post_id)
