@@ -10,6 +10,7 @@ Flask-Bcrypt==0.7.1
 Flask-Login==0.4.1
 Flask-SQLAlchemy==2.4.0
 Flask-WTF==0.14.2
+gunicorn==19.9.0
 importlib-metadata==0.17
 itsdangerous==1.1.0
 Jinja2==2.10.1

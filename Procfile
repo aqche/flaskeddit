@@ -1,0 +1,1 @@
+web: gunicorn "flaskeddit:create_app()"
