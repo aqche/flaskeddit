@@ -13,7 +13,9 @@ def register():
         return redirect(url_for("feed.feed"))
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode(
+            "utf-8"
+        )
         app_user = AppUser(
             username=form.username.data.lower(), password=hashed_password
         )
