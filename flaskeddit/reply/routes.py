@@ -24,7 +24,7 @@ def reply(name, title):
         reply = Reply(reply=form.reply.data, post=post, user=current_user)
         db.session.add(reply)
         db.session.commit()
-        flash("Successfully created reply", "primary")
+        flash("Successfully created reply.", "primary")
         return redirect(url_for("post.post", name=name, title=title))
     return render_template("create_reply.jinja2", name=name, title=title, form=form)
 
@@ -42,7 +42,7 @@ def update_reply(name, title, reply_id):
     if form.validate_on_submit():
         reply.reply = form.reply.data
         db.session.commit()
-        flash("Successfully updated reply", "primary")
+        flash("Successfully updated reply.", "primary")
         return redirect(url_for("post.post", name=name, title=title))
     form.reply.data = reply.reply
     return render_template(

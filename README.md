@@ -50,6 +50,16 @@ flask run
 
 Now you can give the application a try at [http://localhost:5000](http://localhost:5000)!
 
+## Testing
+
+Flaskeddit is tested using pytest.
+
+Use `pytest` to run the application's tests.
+
+```
+pytest
+```
+
 ## Built With
 
 * [Flask](http://flask.pocoo.org/) - Python Framework
