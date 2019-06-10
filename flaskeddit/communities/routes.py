@@ -39,7 +39,7 @@ def top_communities():
         )
         .join(AppUser, Community.user_id == AppUser.id)
         .outerjoin(CommunityMember, Community.id == CommunityMember.community_id)
-        .group_by(Community.id)
+        .group_by(Community.id, AppUser.id)
         .order_by(db.literal_column("community_members").desc())
         .paginate(page=page, per_page=5)
     )
