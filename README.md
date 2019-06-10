@@ -60,6 +60,24 @@ Use `pytest` to run the application's tests.
 pytest
 ```
 
+## Deployment
+
+Flaskeddit is automatically deployed to [Heroku](https://www.heroku.com/) using [CircleCI](https://circleci.com/).
+
+You can also use `git` to manually deploy the application.
+
+```
+export HEROKU_API_KEY="heroku_api_key"
+export HEROKU_APP_NAME="heroku_app_name"
+git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+```
+
+To serve the application locally, you can use [gunicorn](https://gunicorn.org/).
+
+```
+gunicorn "flaskeddit:create_app()"
+```
+
 ## Built With
 
 * [Flask](http://flask.pocoo.org/) - Python Framework
