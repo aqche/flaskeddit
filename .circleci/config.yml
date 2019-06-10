@@ -1,0 +1,30 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - run: pip install -r requirements.txt
+      - run: source venv/bin/activate
+      - run: pytest
+  deploy:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - deploy:
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/flaskeddit.git master
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
