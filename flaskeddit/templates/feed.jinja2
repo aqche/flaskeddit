@@ -81,7 +81,7 @@
         </div>
       {% endfor %} 
     {% else %}
-      <p>Join communities to add them to your feed!</p>
+      <p>Join <a href="{{ url_for('communities.communities') }}">communities</a> to add them to your feed!</p>
     {% endif %}
     <nav class="my-2" aria-label="Page navigation example">
       <ul class="pagination">
