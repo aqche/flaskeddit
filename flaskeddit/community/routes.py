@@ -9,6 +9,7 @@ from flaskeddit.models import AppUser, Community, CommunityMember, Post, PostVot
 
 @community_blueprint.route("/community/<string:name>")
 def community(name):
+    """Route for viewing a community and its posts sorted by date created."""
     page = int(request.args.get("page", 1))
     community = Community.query.filter_by(name=name).first_or_404()
     posts = (
@@ -43,6 +44,7 @@ def community(name):
 
 @community_blueprint.route("/community/<string:name>/top")
 def top_community(name):
+    """Route for viewing a community and its posts sorted by upvotes."""
     page = int(request.args.get("page", 1))
     community = Community.query.filter_by(name=name).first_or_404()
     posts = (
@@ -78,6 +80,7 @@ def top_community(name):
 @community_blueprint.route("/community/create", methods=["GET", "POST"])
 @login_required
 def create_community():
+    """Route for creating a community."""
     form = CommunityForm()
     if form.validate_on_submit():
         community = Community(
@@ -95,6 +98,7 @@ def create_community():
 @community_blueprint.route("/community/<string:name>/update", methods=["GET", "POST"])
 @login_required
 def update_community(name):
+    """Route for updating a community description."""
     community = Community.query.filter_by(name=name).first_or_404()
     if community.user_id != current_user.id:
         return redirect(url_for("community.community", name=name))
@@ -111,6 +115,7 @@ def update_community(name):
 @community_blueprint.route("/community/<string:name>/delete", methods=["POST"])
 @login_required
 def delete_community(name):
+    """Route for deleting a community."""
     community = Community.query.filter_by(name=name).first_or_404()
     if community.user_id != current_user.id:
         return redirect(url_for("community.community", name=name))
@@ -123,6 +128,7 @@ def delete_community(name):
 @community_blueprint.route("/community/<string:name>/join", methods=["POST"])
 @login_required
 def join_community(name):
+    """Route for joining a community.""""
     community = Community.query.filter_by(name=name).first_or_404()
     community_member = CommunityMember.query.filter_by(
         community_id=community.id, user_id=current_user.id
@@ -138,6 +144,7 @@ def join_community(name):
 @community_blueprint.route("/community/<string:name>/leave", methods=["POST"])
 @login_required
 def leave_community(name):
+    """Route for leaving a community."""
     community = Community.query.filter_by(name=name).first_or_404()
     community_member = CommunityMember.query.filter_by(
         community_id=community.id, user_id=current_user.id

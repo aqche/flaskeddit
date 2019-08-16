@@ -9,6 +9,7 @@ from flaskeddit.models import AppUser, Community, CommunityMember, Post, PostVot
 @feed_blueprint.route("/")
 @feed_blueprint.route("/feed")
 def feed():
+    """Route for list of posts from joined communities sorted by date created."""
     page = int(request.args.get("page", 1))
     if current_user.is_authenticated:
         posts = (
@@ -36,6 +37,7 @@ def feed():
 
 @feed_blueprint.route("/feed/top")
 def top_feed():
+    """Route for list of posts from joined communities sorted by upvotes."""
     page = int(request.args.get("page", 1))
     if current_user.is_authenticated:
         posts = (

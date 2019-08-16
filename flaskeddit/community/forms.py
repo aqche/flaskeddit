@@ -9,11 +9,14 @@ from flaskeddit.models import Community
 
 
 class CommunityForm(FlaskForm):
+    """Form for creating a new community."""
+
     name = StringField("Name", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
     submit = SubmitField("Create")
 
     def validate_name(self, name):
+        """Validates that a given community name is not taken and does not contain a space."""
         if re.search(" ", name.data):
             raise ValidationError("Name cannot contain a space.")
 
@@ -25,5 +28,7 @@ class CommunityForm(FlaskForm):
 
 
 class UpdateCommunityForm(FlaskForm):
+    """Form for updating a community description."""
+
     description = TextAreaField("Description", validators=[DataRequired()])
     submit = SubmitField("Update")

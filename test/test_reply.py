@@ -4,6 +4,7 @@ from flaskeddit.models import AppUser, Community, Post, Reply, ReplyVote
 
 class TestReply:
     def test_get_reply(self, test_client):
+        """Test GET request to the reply route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
@@ -34,6 +35,7 @@ class TestReply:
         assert b"Create Reply" in response.data
 
     def test_post_reply(self, test_client):
+        """Test POST request to the reply route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
@@ -66,6 +68,7 @@ class TestReply:
         assert b"Successfully created reply" in response.data
 
     def test_get_update_reply(self, test_client):
+        """Test GET request to the update reply route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
@@ -98,6 +101,7 @@ class TestReply:
         assert b"Update Reply" in response.data
 
     def test_post_update_reply(self, test_client):
+        """Test POST request to the update reply route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
@@ -132,6 +136,7 @@ class TestReply:
         assert b"Successfully updated reply" in response.data
 
     def test_post_delete_reply(self, test_client):
+        """Test POST request to the delete reply route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
@@ -165,6 +170,7 @@ class TestReply:
         assert b"Successfully deleted reply" in response.data
 
     def test_post_upvote_reply(self, test_client):
+        """Test POST request to the upvote reply route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
@@ -201,6 +207,7 @@ class TestReply:
         assert reply_vote.vote == 1
 
     def test_post_downvote_reply(self, test_client):
+        """Test POST request to the downvote reply route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(

@@ -13,6 +13,10 @@ login_manager.login_message_category = "danger"
 
 
 def create_app(config=Config):
+    """
+    Factory method for creating the Flaskeddit Flask app.
+    https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/
+    """
     app = Flask(__name__)
     app.config.from_object(config)
 

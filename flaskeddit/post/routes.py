@@ -9,6 +9,7 @@ from flaskeddit.post.forms import PostForm, UpdatePostForm
 
 @post_blueprint.route("/community/<string:name>/post/<string:title>")
 def post(name, title):
+    """Route for viewing a post and its replies sorted by date created."""
     page = int(request.args.get("page", 1))
     post = (
         db.session.query(
@@ -51,6 +52,7 @@ def post(name, title):
 
 @post_blueprint.route("/community/<string:name>/post/<string:title>/top")
 def top_post(name, title):
+    """Route for viewing a post and its replies sorted by upvotes."""
     page = int(request.args.get("page", 1))
     post = (
         db.session.query(
@@ -94,6 +96,7 @@ def top_post(name, title):
 @post_blueprint.route("/community/<string:name>/post/create", methods=["GET", "POST"])
 @login_required
 def create_post(name):
+    """Route for creating a post."""
     community = Community.query.filter_by(name=name).first_or_404()
     form = PostForm()
     form.community_id.data = community.id
@@ -116,6 +119,7 @@ def create_post(name):
 )
 @login_required
 def update_post(name, title):
+    """Route for updating a post."""
     post = (
         db.session.query(Post)
         .join(Community, Post.community_id == Community.id)
@@ -140,6 +144,7 @@ def update_post(name, title):
 )
 @login_required
 def delete_post(name, title):
+    """Route for deleting a post."""
     post = (
         db.session.query(Post)
         .join(Community, Post.community_id == Community.id)
@@ -160,6 +165,7 @@ def delete_post(name, title):
 )
 @login_required
 def upvote_post(name, title):
+    """Route for upvoting a post."""
     post = (
         db.session.query(Post)
         .join(Community, Post.community_id == Community.id)
@@ -186,6 +192,7 @@ def upvote_post(name, title):
 )
 @login_required
 def downvote_post(name, title):
+    """Route for downvoting a post."""
     post = (
         db.session.query(Post)
         .join(Community, Post.community_id == Community.id)

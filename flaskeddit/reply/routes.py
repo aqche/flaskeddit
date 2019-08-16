@@ -12,6 +12,7 @@ from flaskeddit.reply.forms import ReplyForm
 )
 @login_required
 def reply(name, title):
+    """Route for creating a reply."""
     post = (
         db.session.query(Post)
         .join(Community, Post.community_id == Community.id)
@@ -35,6 +36,7 @@ def reply(name, title):
 )
 @login_required
 def update_reply(name, title, reply_id):
+    """Route for updating a reply."""
     reply = Reply.query.get_or_404(reply_id)
     if reply.user_id != current_user.id:
         return redirect(url_for("post.post", name=name, title=title))
@@ -56,6 +58,7 @@ def update_reply(name, title, reply_id):
 )
 @login_required
 def delete_reply(name, title, reply_id):
+    """Route for deleting a reply."""
     reply = Reply.query.get_or_404(reply_id)
     if reply.user_id != current_user.id:
         return redirect(url_for("post.post", name=name, title=title))
@@ -71,6 +74,7 @@ def delete_reply(name, title, reply_id):
 )
 @login_required
 def upvote_reply(name, title, reply_id):
+    """Route for upvoting a reply."""
     reply = Reply.query.get_or_404(reply_id)
     reply_vote = ReplyVote.query.filter_by(
         user_id=current_user.id, reply_id=reply.id
@@ -92,6 +96,7 @@ def upvote_reply(name, title, reply_id):
 )
 @login_required
 def downvote_reply(name, title, reply_id):
+    """Route for downvoting a reply."""
     reply = Reply.query.get_or_404(reply_id)
     reply_vote = ReplyVote.query.filter_by(
         user_id=current_user.id, reply_id=reply.id

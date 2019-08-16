@@ -6,5 +6,6 @@ from flaskeddit.user import user_blueprint
 
 @user_blueprint.route("/user/<string:username>")
 def app_user(username):
+    """Route for viewing a user profile."""
     app_user = AppUser.query.filter_by(username=username).first_or_404()
     return render_template("user.jinja2", app_user=app_user)

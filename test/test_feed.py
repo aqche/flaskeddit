@@ -4,6 +4,7 @@ from flaskeddit.models import AppUser, Community, CommunityMember, Post
 
 class TestFeed:
     def test_get_feed(self, test_client):
+        """Test GET request to the feed route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
@@ -34,6 +35,7 @@ class TestFeed:
         assert b"mockposttitle" in response.data
 
     def test_get_top_feed(self, test_client):
+        """Test GET request to the top feed route."""
         hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
