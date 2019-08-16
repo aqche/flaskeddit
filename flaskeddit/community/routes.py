@@ -128,7 +128,7 @@ def delete_community(name):
 @community_blueprint.route("/community/<string:name>/join", methods=["POST"])
 @login_required
 def join_community(name):
-    """Route for joining a community.""""
+    """Route for joining a community."""
     community = Community.query.filter_by(name=name).first_or_404()
     community_member = CommunityMember.query.filter_by(
         community_id=community.id, user_id=current_user.id
