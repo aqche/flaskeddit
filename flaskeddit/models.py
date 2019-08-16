@@ -7,10 +7,16 @@ from flaskeddit import db, login_manager
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Loader used to reload the user object from the user ID stored in the session.
+    https://flask-login.readthedocs.io/en/latest/#how-it-works
+    """
     return AppUser.query.get(user_id)
 
 
 class AppUser(db.Model, UserMixin):
+    """Model that represents a user."""
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
@@ -44,6 +50,8 @@ class AppUser(db.Model, UserMixin):
 
 
 class Community(db.Model):
+    """Model that represents a community."""
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=False)
@@ -66,6 +74,8 @@ class Community(db.Model):
 
 
 class Post(db.Model):
+    """Model that represents a post."""
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     post = db.Column(db.Text, nullable=False)
@@ -86,6 +96,8 @@ class Post(db.Model):
 
 
 class Reply(db.Model):
+    """Model that represents a reply."""
+
     id = db.Column(db.Integer, primary_key=True)
     reply = db.Column(db.Text, nullable=False)
     date_created = db.Column(
@@ -102,6 +114,8 @@ class Reply(db.Model):
 
 
 class PostVote(db.Model):
+    """Model that tracks a user's vote on a post."""
+
     id = db.Column(db.Integer, primary_key=True)
     vote = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
@@ -112,6 +126,8 @@ class PostVote(db.Model):
 
 
 class ReplyVote(db.Model):
+    """Model that tracks a user's vote on a reply."""
+
     id = db.Column(db.Integer, primary_key=True)
     vote = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
@@ -122,6 +138,8 @@ class ReplyVote(db.Model):
 
 
 class CommunityMember(db.Model):
+    """Model that tracks a user's community membership."""
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("app_user.id"), nullable=False)
     community_id = db.Column(db.Integer, db.ForeignKey("community.id"), nullable=False)

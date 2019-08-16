@@ -6,12 +6,15 @@ from flaskeddit.models import Post
 
 
 class PostForm(FlaskForm):
+    """Form for creating a new post."""
+
     title = StringField("Title", validators=[DataRequired()])
     post = TextAreaField("Post", validators=[DataRequired()])
     community_id = IntegerField("Community Id", validators=[DataRequired()])
     submit = SubmitField("Create")
 
     def validate_title(self, title):
+        """Validates that a given post title does not already exist within target community."""
         post = Post.query.filter_by(
             title=title.data, community_id=self.community_id.data
         ).first()
@@ -22,5 +25,7 @@ class PostForm(FlaskForm):
 
 
 class UpdatePostForm(FlaskForm):
+    """Form for updating a post."""
+
     post = TextAreaField("Post", validators=[DataRequired()])
     submit = SubmitField("Create")

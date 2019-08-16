@@ -7,6 +7,7 @@ from flaskeddit.models import AppUser, Community, CommunityMember
 
 @communities_blueprint.route("/communities")
 def communities():
+    """Route for list of all communities sorted by date created."""
     page = int(request.args.get("page", 1))
     communities = (
         db.session.query(
@@ -26,6 +27,7 @@ def communities():
 
 @communities_blueprint.route("/communities/top")
 def top_communities():
+    """Route for list of all communities sorted by most members."""
     page = int(request.args.get("page", 1))
     communities = (
         db.session.query(
