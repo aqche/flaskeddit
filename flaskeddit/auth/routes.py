@@ -1,10 +1,7 @@
 from flask import flash, redirect, render_template, session, url_for
-from flask_login import current_user, login_required, login_user, logout_user
-
-from flaskeddit import bcrypt, db
-from flaskeddit.auth import auth_blueprint
+from flask_login import current_user, login_required
+from flaskeddit.auth import auth_blueprint, auth_service
 from flaskeddit.auth.forms import LoginForm, RegisterForm
-from flaskeddit.models import AppUser
 
 
 @auth_blueprint.route("/register", methods=["GET", "POST"])
@@ -14,14 +11,7 @@ def register():
         return redirect(url_for("feed.feed"))
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode(
-            "utf-8"
-        )
-        app_user = AppUser(
-            username=form.username.data.lower(), password=hashed_password
-        )
-        db.session.add(app_user)
-        db.session.commit()
+        auth_service.register_user(form.username.data, form.password.data)
         flash("Successfully registered.", "primary")
         return redirect(url_for("auth.login"))
     return render_template("register.jinja2", form=form)
@@ -34,11 +24,10 @@ def login():
         return redirect(url_for("feed.feed"))
     form = LoginForm()
     if form.validate_on_submit():
-        app_user = AppUser.query.filter_by(username=form.username.data.lower()).first()
-        if app_user and bcrypt.check_password_hash(
-            app_user.password, form.password.data
-        ):
-            login_user(app_user)
+        login_successful = auth_service.log_in_user(
+            form.username.data, form.password.data
+        )
+        if login_successful:
             flash("Successfully logged in.", "primary")
             if session.get("next"):
                 return redirect(session.get("next"))
@@ -53,6 +42,6 @@ def login():
 @login_required
 def logout():
     """Route for logging out users."""
-    logout_user()
+    auth_service.log_out_user()
     flash("Successfully logged out.", "primary")
     return redirect(url_for("auth.login"))
