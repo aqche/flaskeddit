@@ -27,8 +27,11 @@ def delete_community(community):
     db.session.commit()
 
 
-def get_posts_by_date_created(community_id, page):
+def get_posts(community_id, page, ordered_by_votes):
     """Gets posts from a community by date created."""
+    ordered_by = Post.date_created.desc()
+    if ordered_by_votes:
+        ordered_by = db.literal_column("votes").desc()
     posts = (
         db.session.query(
             Post.title,
@@ -41,27 +44,7 @@ def get_posts_by_date_created(community_id, page):
         .join(AppUser, Post.user_id == AppUser.id)
         .filter(Post.community_id == community_id)
         .group_by(Post.id, AppUser.id)
-        .order_by(Post.date_created.desc())
-        .paginate(page=page, per_page=5)
-    )
-    return posts
-
-
-def get_posts_by_votes(community_id, page):
-    """Gets posts from a community by vote score."""
-    posts = (
-        db.session.query(
-            Post.title,
-            Post.post,
-            Post.date_created,
-            db.func.coalesce(db.func.sum(PostVote.vote), 0).label("votes"),
-            AppUser.username,
-        )
-        .outerjoin(PostVote, Post.id == PostVote.post_id)
-        .join(AppUser, Post.user_id == AppUser.id)
-        .filter(Post.community_id == community_id)
-        .group_by(Post.id, AppUser.id)
-        .order_by(db.literal_column("votes").desc())
+        .order_by(ordered_by)
         .paginate(page=page, per_page=5)
     )
     return posts

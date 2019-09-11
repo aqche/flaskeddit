@@ -2,7 +2,7 @@ from flaskeddit import db
 from flaskeddit.models import AppUser, Community, CommunityMember
 
 
-def get_communities_by_date_created(page):
+def get_communities(page):
     """Get list of communities by date created."""
     communities = (
         db.session.query(

@@ -11,7 +11,7 @@ def community(name):
     page = int(request.args.get("page", 1))
     community = community_service.get_community(name)
     if community:
-        posts = community_service.get_posts_by_date_created(community.id, page)
+        posts = community_service.get_posts(community.id, page, False)
         community_member = None
         if current_user.is_authenticated:
             community_member = community_service.get_community_member(
@@ -34,7 +34,7 @@ def top_community(name):
     page = int(request.args.get("page", 1))
     community = community_service.get_community(name)
     if community:
-        posts = community_service.get_posts_by_votes(community.id, page)
+        posts = community_service.get_posts(community.id, page, True)
         community_member = None
         if current_user.is_authenticated:
             community_member = community_service.get_community_member(

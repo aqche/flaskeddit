@@ -7,7 +7,7 @@ from flaskeddit.communities import communities_blueprint, communities_service
 def communities():
     """Route for list of all communities sorted by date created."""
     page = int(request.args.get("page", 1))
-    communities = communities_service.get_communities_by_date_created(page)
+    communities = communities_service.get_communities(page)
     return render_template("communities.jinja2", page="recent", communities=communities)
 
 
