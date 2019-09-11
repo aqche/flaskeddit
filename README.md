@@ -42,7 +42,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Set the `FLASK_APP` environment variable, create the SQLite database, and start the app.
+Set the `FLASK_APP` environment variable, create the SQLite database, and start the app. Now you can give the application a try at [http://localhost:5000](http://localhost:5000)!
 
 ```
 export FLASK_APP=flaskeddit.py
@@ -50,7 +50,11 @@ flask cli create_db
 flask run
 ```
 
-Now you can give the application a try at [http://localhost:5000](http://localhost:5000)!
+You can also serve the application locally using [gunicorn](https://gunicorn.org/).
+
+```
+gunicorn "flaskeddit:create_app()"
+```
 
 ## Testing
 
@@ -72,12 +76,6 @@ You can also use `git` to manually deploy the application.
 export HEROKU_API_KEY="heroku_api_key"
 export HEROKU_APP_NAME="heroku_app_name"
 git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
-```
-
-To serve the application locally, you can use [gunicorn](https://gunicorn.org/).
-
-```
-gunicorn "flaskeddit:create_app()"
 ```
 
 ## Built With
