@@ -1,36 +1,35 @@
-from flaskeddit import db
-from flaskeddit.models import AppUser, Community
+from flaskeddit.auth import auth_service
+from flaskeddit.community import community_service
+from flaskeddit.user import user_service
 
 
 class TestCommunities:
     def test_get_communities(self, test_client):
         """Test GET request to the communities route."""
-        app_user = AppUser(username="mockusername", password="mockpassword")
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, "Mockpassword123!")
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
 
         response = test_client.get("/communities")
 
         assert response is not None
         assert response.status_code == 200
-        assert b"mockcommunity" in response.data
+        assert bytes(community_name, "utf-8") in response.data
 
     def test_get_top_communities(self, test_client):
         """Test GET request to the top communities route."""
-        app_user = AppUser(username="mockusername", password="mockpassword")
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, "Mockpassword123!")
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
 
         response = test_client.get("/communities/top")
 
         assert response is not None
         assert response.status_code == 200
-        assert b"mockcommunity" in response.data
+        assert bytes(community_name, "utf-8") in response.data

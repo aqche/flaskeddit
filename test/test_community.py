@@ -1,51 +1,47 @@
-from flaskeddit import bcrypt, db
-from flaskeddit.models import AppUser, Community
+from test import helpers
+
+from flaskeddit.auth import auth_service
+from flaskeddit.community import community_service
+from flaskeddit.user import user_service
 
 
 class TestCommunity:
     def test_get_community(self, test_client):
         """Test GET request to the community route."""
-        app_user = AppUser(username="mockusername", password="mockpassword")
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, "Mockpassword123!")
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
 
-        response = test_client.get(f"/community/{community.name}")
+        response = test_client.get(f"/community/{community_name}")
 
         assert response is not None
         assert response.status_code == 200
-        assert b"mockcommunity" in response.data
+        assert bytes(community_name, "utf-8") in response.data
 
     def test_get_top_community(self, test_client):
         """Test GET request to the top community route."""
-        app_user = AppUser(username="mockusername", password="mockpassword")
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, "Mockpassword123!")
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
 
-        response = test_client.get(f"/community/{community.name}/top")
+        response = test_client.get(f"/community/{community_name}/top")
 
         assert response is not None
         assert response.status_code == 200
-        assert b"mockcommunity" in response.data
+        assert bytes(community_name, "utf-8") in response.data
 
     def test_get_create_community(self, test_client):
         """Test GET request to the create community route."""
-        hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        app_user = AppUser(username="mockusername", password=hashed_password)
-        db.session.add(app_user)
-        db.session.commit()
-        test_client.post(
-            "/login",
-            data={"username": "mockusername", "password": "Mockpassword123!"},
-            follow_redirects=True,
-        )
+        username = "mockusername"
+        password = "Mockpassword123!"
+        auth_service.register_user(username, password)
+        helpers.login(test_client, username, password)
 
         response = test_client.get("/community/create")
 
@@ -55,15 +51,10 @@ class TestCommunity:
 
     def test_post_create_community(self, test_client):
         """Test POST request to the create community route."""
-        hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        app_user = AppUser(username="mockusername", password=hashed_password)
-        db.session.add(app_user)
-        db.session.commit()
-        test_client.post(
-            "/login",
-            data={"username": "mockusername", "password": "Mockpassword123!"},
-            follow_redirects=True,
-        )
+        username = "mockusername"
+        password = "Mockpassword123!"
+        auth_service.register_user(username, password)
+        helpers.login(test_client, username, password)
 
         response = test_client.post(
             "/community/create",
@@ -77,21 +68,16 @@ class TestCommunity:
 
     def test_get_update_community(self, test_client):
         """Test GET request to the update community route."""
-        hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        app_user = AppUser(username="mockusername", password=hashed_password)
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        password = "Mockpassword123!"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, password)
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
-        test_client.post(
-            "/login",
-            data={"username": "mockusername", "password": "Mockpassword123!"},
-            follow_redirects=True,
-        )
+        helpers.login(test_client, username, password)
 
-        response = test_client.get(f"/community/{community.name}/update")
+        response = test_client.get(f"/community/{community_name}/update")
 
         assert response is not None
         assert response.status_code == 200
@@ -99,22 +85,17 @@ class TestCommunity:
 
     def test_post_update_community(self, test_client):
         """Test POST request to the update community route."""
-        hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        app_user = AppUser(username="mockusername", password=hashed_password)
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        password = "Mockpassword123!"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, password)
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
-        test_client.post(
-            "/login",
-            data={"username": "mockusername", "password": "Mockpassword123!"},
-            follow_redirects=True,
-        )
+        helpers.login(test_client, username, password)
 
         response = test_client.post(
-            f"/community/{community.name}/update",
+            f"/community/{community_name}/update",
             data={"description": "mockupdateddescription"},
             follow_redirects=True,
         )
@@ -125,22 +106,17 @@ class TestCommunity:
 
     def test_post_delete_community(self, test_client):
         """Test POST request to the delete community route."""
-        hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        app_user = AppUser(username="mockusername", password=hashed_password)
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        password = "Mockpassword123!"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, password)
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
-        test_client.post(
-            "/login",
-            data={"username": "mockusername", "password": "Mockpassword123!"},
-            follow_redirects=True,
-        )
+        helpers.login(test_client, username, password)
 
         response = test_client.post(
-            f"/community/{community.name}/delete", follow_redirects=True
+            f"/community/{community_name}/delete", follow_redirects=True
         )
 
         assert response is not None
@@ -149,22 +125,17 @@ class TestCommunity:
 
     def test_post_join_community(self, test_client):
         """Test POST request to the join community route."""
-        hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        app_user = AppUser(username="mockusername", password=hashed_password)
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        password = "Mockpassword123!"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, password)
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
-        test_client.post(
-            "/login",
-            data={"username": "mockusername", "password": "Mockpassword123!"},
-            follow_redirects=True,
-        )
+        helpers.login(test_client, username, password)
 
         response = test_client.post(
-            f"/community/{community.name}/join", follow_redirects=True
+            f"/community/{community_name}/join", follow_redirects=True
         )
 
         assert response is not None
@@ -173,22 +144,17 @@ class TestCommunity:
 
     def test_post_leave_community(self, test_client):
         """Test POST request to the leave community route."""
-        hashed_password = bcrypt.generate_password_hash("Mockpassword123!")
-        app_user = AppUser(username="mockusername", password=hashed_password)
-        community = Community(
-            name="mockcommunity", description="mockdescription", app_user=app_user
+        username = "mockusername"
+        password = "Mockpassword123!"
+        community_name = "mockcommunity"
+        auth_service.register_user(username, password)
+        community_service.create_community(
+            community_name, "mockdescription", user_service.get_user(username)
         )
-        db.session.add(app_user)
-        db.session.add(community)
-        db.session.commit()
-        test_client.post(
-            "/login",
-            data={"username": "mockusername", "password": "Mockpassword123!"},
-            follow_redirects=True,
-        )
+        helpers.login(test_client, username, password)
 
         response = test_client.post(
-            f"/community/{community.name}/leave", follow_redirects=True
+            f"/community/{community_name}/leave", follow_redirects=True
         )
 
         assert response is not None

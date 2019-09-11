@@ -1,11 +1,10 @@
 from flask import render_template
 
-from flaskeddit.models import AppUser
-from flaskeddit.user import user_blueprint
+from flaskeddit.user import user_blueprint, user_service
 
 
 @user_blueprint.route("/user/<string:username>")
 def app_user(username):
     """Route for viewing a user profile."""
-    app_user = AppUser.query.filter_by(username=username).first_or_404()
-    return render_template("user.jinja2", app_user=app_user)
+    user = user_service.get_user(username)
+    return render_template("user.jinja2", app_user=user)
