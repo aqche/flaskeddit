@@ -1,48 +1,62 @@
 from test import helpers
 
-from flaskeddit.auth import auth_service
-from flaskeddit.community import community_service
-from flaskeddit.post import post_service
-from flaskeddit.user import user_service
+from flaskeddit import bcrypt, db
+from flaskeddit.models import AppUser, Community, CommunityMember, Post
 
 
 class TestFeed:
     def test_get_feed(self, test_client):
         """Test GET request to the feed route."""
-        username = "mockusername"
         password = "Mockpassword123!"
-        community_name = "mockcommunity"
-        post_title = "mockposttitle"
-        auth_service.register_user(username, password)
-        user = user_service.get_user(username)
-        community_service.create_community(community_name, "mockdescription", user)
-        community = community_service.get_community(community_name)
-        community_service.create_community_member(community, user)
-        post_service.create_post(post_title, "mockpost", community, user)
-        helpers.login(test_client, username, password)
+        hashed_password = bcrypt.generate_password_hash(password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        community = Community(
+            name="mockcommunity", description="mockdescription", app_user=app_user
+        )
+        community_member = CommunityMember(app_user=app_user, community=community)
+        post = Post(
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
+        )
+        db.session.add(app_user)
+        db.session.add(community)
+        db.session.add(community_member)
+        db.session.add(post)
+        db.session.commit()
+        helpers.login(test_client, app_user.username, password)
 
         response = test_client.get("/")
 
         assert response is not None
         assert response.status_code == 200
-        assert bytes(post_title, "utf-8") in response.data
+        assert bytes(post.title, "utf-8") in response.data
 
     def test_get_top_feed(self, test_client):
         """Test GET request to the top feed route."""
-        username = "mockusername"
         password = "Mockpassword123!"
-        community_name = "mockcommunity"
-        post_title = "mockposttitle"
-        auth_service.register_user(username, password)
-        user = user_service.get_user(username)
-        community_service.create_community(community_name, "mockdescription", user)
-        community = community_service.get_community(community_name)
-        community_service.create_community_member(community, user)
-        post_service.create_post(post_title, "mockpost", community, user)
-        helpers.login(test_client, username, password)
+        hashed_password = bcrypt.generate_password_hash(password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        community = Community(
+            name="mockcommunity", description="mockdescription", app_user=app_user
+        )
+        community_member = CommunityMember(app_user=app_user, community=community)
+        post = Post(
+            title="mockposttitle",
+            post="mockpost",
+            app_user=app_user,
+            community=community,
+        )
+        db.session.add(app_user)
+        db.session.add(community)
+        db.session.add(community_member)
+        db.session.add(post)
+        db.session.commit()
+        helpers.login(test_client, app_user.username, password)
 
         response = test_client.get("/feed/top")
 
         assert response is not None
         assert response.status_code == 200
-        assert bytes(post_title, "utf-8") in response.data
+        assert bytes(post.title, "utf-8") in response.data

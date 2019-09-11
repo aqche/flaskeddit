@@ -1,6 +1,7 @@
 from test import helpers
 
-from flaskeddit.auth import auth_service
+from flaskeddit import bcrypt, db
+from flaskeddit.models import AppUser
 
 
 class TestAuth:
@@ -38,13 +39,15 @@ class TestAuth:
 
     def test_post_login(self, test_client):
         """Test POST request to the login route."""
-        username = "mockusername"
         password = "Mockpassword123!"
-        auth_service.register_user(username, password)
+        hashed_password = bcrypt.generate_password_hash(password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        db.session.add(app_user)
+        db.session.commit()
 
         response = test_client.post(
             "/login",
-            data={"username": username, "password": password},
+            data={"username": app_user.username, "password": password},
             follow_redirects=True,
         )
 
@@ -54,10 +57,12 @@ class TestAuth:
 
     def test_post_logout(self, test_client):
         """Test POST request to the logout route."""
-        username = "mockusername"
         password = "Mockpassword123!"
-        auth_service.register_user(username, password)
-        helpers.login(test_client, username, password)
+        hashed_password = bcrypt.generate_password_hash(password)
+        app_user = AppUser(username="mockusername", password=hashed_password)
+        db.session.add(app_user)
+        db.session.commit()
+        helpers.login(test_client, app_user.username, password)
 
         response = test_client.post("/logout", follow_redirects=True)
 
