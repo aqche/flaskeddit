@@ -1,9 +1,8 @@
-from flask import flash, redirect, render_template, request, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
-from flaskeddit import db
-from flaskeddit.models import Community, Post, Reply, ReplyVote
-from flaskeddit.reply import reply_blueprint
+from flaskeddit.post import post_service
+from flaskeddit.reply import reply_blueprint, reply_service
 from flaskeddit.reply.forms import ReplyForm
 
 
@@ -13,21 +12,16 @@ from flaskeddit.reply.forms import ReplyForm
 @login_required
 def reply(name, title):
     """Route for creating a reply."""
-    post = (
-        db.session.query(Post)
-        .join(Community, Post.community_id == Community.id)
-        .filter(Post.title == title)
-        .filter(Community.name == name)
-        .first_or_404()
-    )
-    form = ReplyForm()
-    if form.validate_on_submit():
-        reply = Reply(reply=form.reply.data, post=post, app_user=current_user)
-        db.session.add(reply)
-        db.session.commit()
-        flash("Successfully created reply.", "primary")
-        return redirect(url_for("post.post", name=name, title=title))
-    return render_template("create_reply.jinja2", name=name, title=title, form=form)
+    post = post_service.get_post(title, name)
+    if post:
+        form = ReplyForm()
+        if form.validate_on_submit():
+            reply_service.create_reply(form.reply.data, post, current_user)
+            flash("Successfully created reply.", "primary")
+            return redirect(url_for("post.post", name=name, title=title))
+        return render_template("create_reply.jinja2", name=name, title=title, form=form)
+    else:
+        abort(404)
 
 
 @reply_blueprint.route(
@@ -37,19 +31,21 @@ def reply(name, title):
 @login_required
 def update_reply(name, title, reply_id):
     """Route for updating a reply."""
-    reply = Reply.query.get_or_404(reply_id)
-    if reply.user_id != current_user.id:
-        return redirect(url_for("post.post", name=name, title=title))
-    form = ReplyForm()
-    if form.validate_on_submit():
-        reply.reply = form.reply.data
-        db.session.commit()
-        flash("Successfully updated reply.", "primary")
-        return redirect(url_for("post.post", name=name, title=title))
-    form.reply.data = reply.reply
-    return render_template(
-        "update_reply.jinja2", name=name, title=title, reply_id=reply_id, form=form
-    )
+    reply = reply_service.get_reply(reply_id)
+    if reply:
+        if reply.user_id != current_user.id:
+            return redirect(url_for("post.post", name=name, title=title))
+        form = ReplyForm()
+        if form.validate_on_submit():
+            reply_service.update_reply(reply, form.reply.data)
+            flash("Successfully updated reply.", "primary")
+            return redirect(url_for("post.post", name=name, title=title))
+        form.reply.data = reply.reply
+        return render_template(
+            "update_reply.jinja2", name=name, title=title, reply_id=reply_id, form=form
+        )
+    else:
+        abort(404)
 
 
 @reply_blueprint.route(
@@ -59,13 +55,15 @@ def update_reply(name, title, reply_id):
 @login_required
 def delete_reply(name, title, reply_id):
     """Route for deleting a reply."""
-    reply = Reply.query.get_or_404(reply_id)
-    if reply.user_id != current_user.id:
+    reply = reply_service.get_reply(reply_id)
+    if reply:
+        if reply.user_id != current_user.id:
+            return redirect(url_for("post.post", name=name, title=title))
+        reply_service.delete_reply(reply)
+        flash("Successfully deleted reply.", "primary")
         return redirect(url_for("post.post", name=name, title=title))
-    db.session.delete(reply)
-    db.session.commit()
-    flash("Successfully deleted reply.", "primary")
-    return redirect(url_for("post.post", name=name, title=title))
+    else:
+        abort(404)
 
 
 @reply_blueprint.route(
@@ -75,19 +73,12 @@ def delete_reply(name, title, reply_id):
 @login_required
 def upvote_reply(name, title, reply_id):
     """Route for upvoting a reply."""
-    reply = Reply.query.get_or_404(reply_id)
-    reply_vote = ReplyVote.query.filter_by(
-        user_id=current_user.id, reply_id=reply.id
-    ).first()
-    if reply_vote is None:
-        reply_vote = ReplyVote(vote=1, user_id=current_user.id, reply_id=reply.id)
-        db.session.add(reply_vote)
-    elif abs(reply_vote.vote) == 1:
-        reply_vote.vote = 0
+    reply = reply_service.get_reply(reply_id)
+    if reply:
+        reply_service.upvote_reply(reply_id, current_user.id)
+        return redirect(request.referrer)
     else:
-        reply_vote.vote = 1
-    db.session.commit()
-    return redirect(request.referrer)
+        abort(404)
 
 
 @reply_blueprint.route(
@@ -97,16 +88,9 @@ def upvote_reply(name, title, reply_id):
 @login_required
 def downvote_reply(name, title, reply_id):
     """Route for downvoting a reply."""
-    reply = Reply.query.get_or_404(reply_id)
-    reply_vote = ReplyVote.query.filter_by(
-        user_id=current_user.id, reply_id=reply.id
-    ).first()
-    if reply_vote is None:
-        reply_vote = ReplyVote(vote=-1, user_id=current_user.id, reply_id=reply.id)
-        db.session.add(reply_vote)
-    elif abs(reply_vote.vote) == 1:
-        reply_vote.vote = 0
+    reply = reply_service.get_reply(reply_id)
+    if reply:
+        reply_service.downvote_reply(reply_id, current_user.id)
+        return redirect(request.referrer)
     else:
-        reply_vote.vote = -1
-    db.session.commit()
-    return redirect(request.referrer)
+        abort(404)

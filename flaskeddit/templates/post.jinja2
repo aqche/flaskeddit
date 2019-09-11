@@ -63,13 +63,13 @@
     </div>
     <p class="text-muted ml-1">
       Sort by: 
-      {% if page == "recent" %} 
+      {% if tab == "recent" %} 
         Recent /
         <a
           href="{{ url_for('post.top_post', name=post.community_name, title=post.title) }}"
           >Top</a
         >
-      {% elif page == "top" %}
+      {% elif tab == "top" %}
         <a
           href="{{ url_for('post.post', name=post.community_name, title=post.title) }}"
           >Recent</a
