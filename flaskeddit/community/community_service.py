@@ -8,9 +8,9 @@ def get_community(name):
     return community
 
 
-def create_community(name, description, app_user):
+def create_community(name, description, user):
     """Creates a new community."""
-    community = Community(name=name, description=description, app_user=app_user)
+    community = Community(name=name, description=description, app_user=user)
     db.session.add(community)
     db.session.commit()
 
@@ -27,8 +27,8 @@ def delete_community(community):
     db.session.commit()
 
 
-def get_posts(community_id, page, ordered_by_votes):
-    """Gets posts from a community by date created."""
+def get_community_posts(community_id, page, ordered_by_votes):
+    """Gets list of posts from a community."""
     ordered_by = Post.date_created.desc()
     if ordered_by_votes:
         ordered_by = db.literal_column("votes").desc()
@@ -58,9 +58,9 @@ def get_community_member(community_id, user_id):
     return community_member
 
 
-def create_community_member(community, app_user):
+def create_community_member(community, user):
     """Creates a community member."""
-    community_member = CommunityMember(community=community, app_user=app_user)
+    community_member = CommunityMember(community=community, app_user=user)
     db.session.add(community_member)
     db.session.commit()
 

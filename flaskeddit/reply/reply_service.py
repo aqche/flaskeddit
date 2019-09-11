@@ -3,13 +3,14 @@ from flaskeddit.models import Post, Reply, ReplyVote
 
 
 def get_reply(reply_id):
+    """Gets a reply."""
     reply = Reply.query.get(reply_id)
     return reply
 
 
-def create_reply(reply, post, app_user):
+def create_reply(reply, post, user):
     """Creates a new reply."""
-    reply = Reply(reply=reply, post=post, app_user=app_user)
+    reply = Reply(reply=reply, post=post, app_user=user)
     db.session.add(reply)
     db.session.commit()
 
@@ -26,8 +27,15 @@ def delete_reply(reply):
     db.session.commit()
 
 
-def upvote_reply(reply_id, user_id):
+def get_reply_vote(reply_id, user_id):
+    """Gets a reply vote."""
     reply_vote = ReplyVote.query.filter_by(user_id=user_id, reply_id=reply_id).first()
+    return reply_vote
+
+
+def upvote_reply(reply_id, user_id):
+    """Upvotes a reply."""
+    reply_vote = get_reply_vote(reply_id, user_id)
     if reply_vote is None:
         reply_vote = ReplyVote(vote=1, user_id=user_id, reply_id=reply_id)
         db.session.add(reply_vote)
@@ -39,7 +47,8 @@ def upvote_reply(reply_id, user_id):
 
 
 def downvote_reply(reply_id, user_id):
-    reply_vote = ReplyVote.query.filter_by(user_id=user_id, reply_id=reply_id).first()
+    """Downvotes a reply."""
+    reply_vote = get_reply_vote(reply_id, user_id)
     if reply_vote is None:
         reply_vote = ReplyVote(vote=-1, user_id=user_id, reply_id=reply_id)
         db.session.add(reply_vote)

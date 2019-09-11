@@ -11,7 +11,7 @@ def community(name):
     page = int(request.args.get("page", 1))
     community = community_service.get_community(name)
     if community:
-        posts = community_service.get_posts(community.id, page, False)
+        posts = community_service.get_community_posts(community.id, page, False)
         community_member = None
         if current_user.is_authenticated:
             community_member = community_service.get_community_member(
@@ -19,7 +19,7 @@ def community(name):
             )
         return render_template(
             "community.jinja2",
-            page="recent",
+            tab="recent",
             community=community,
             posts=posts,
             community_member=community_member,
@@ -34,7 +34,7 @@ def top_community(name):
     page = int(request.args.get("page", 1))
     community = community_service.get_community(name)
     if community:
-        posts = community_service.get_posts(community.id, page, True)
+        posts = community_service.get_community_posts(community.id, page, True)
         community_member = None
         if current_user.is_authenticated:
             community_member = community_service.get_community_member(
@@ -42,7 +42,7 @@ def top_community(name):
             )
         return render_template(
             "community.jinja2",
-            page="top",
+            tab="top",
             community=community,
             posts=posts,
             community_member=community_member,

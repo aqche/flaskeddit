@@ -1,4 +1,5 @@
 from flask_login import login_user, logout_user
+
 from flaskeddit import bcrypt, db
 from flaskeddit.models import AppUser
 

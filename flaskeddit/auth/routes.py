@@ -1,5 +1,6 @@
 from flask import flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required
+
 from flaskeddit.auth import auth_blueprint, auth_service
 from flaskeddit.auth.forms import LoginForm, RegisterForm
 

@@ -12,8 +12,8 @@ def post(name, title):
     page = int(request.args.get("page", 1))
     post = post_service.get_post_with_votes(title, name)
     if post:
-        replies = post_service.get_replies(post.id, page, False)
-        return render_template("post.jinja2", page="recent", post=post, replies=replies)
+        replies = post_service.get_post_replies(post.id, page, False)
+        return render_template("post.jinja2", tab="recent", post=post, replies=replies)
     else:
         abort(404)
 
@@ -24,8 +24,8 @@ def top_post(name, title):
     page = int(request.args.get("page", 1))
     post = post_service.get_post_with_votes(title, name)
     if post:
-        replies = post_service.get_replies(post.id, page, True)
-        return render_template("post.jinja2", page="top", post=post, replies=replies)
+        replies = post_service.get_post_replies(post.id, page, True)
+        return render_template("post.jinja2", tab="top", post=post, replies=replies)
     else:
         abort(404)
 

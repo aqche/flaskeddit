@@ -39,9 +39,9 @@ def get_post_with_votes(title, community_name):
     return post
 
 
-def create_post(title, post, community, app_user):
+def create_post(title, post, community, user):
     """Creates a post."""
-    post = Post(title=title, post=post, community=community, app_user=app_user)
+    post = Post(title=title, post=post, community=community, app_user=user)
     db.session.add(post)
     db.session.commit()
 
@@ -58,7 +58,7 @@ def delete_post(post):
     db.session.commit()
 
 
-def get_replies(post_id, page, ordered_by_votes):
+def get_post_replies(post_id, page, ordered_by_votes):
     """Get list of replies for a post."""
     ordered_by = Reply.date_created.desc()
     if ordered_by_votes:
@@ -82,9 +82,15 @@ def get_replies(post_id, page, ordered_by_votes):
     return replies
 
 
+def get_post_vote(post_id, user_id):
+    """Gets a post vote."""
+    post_vote = PostVote.query.filter_by(user_id=user_id, post_id=post_id).first()
+    return post_vote
+
+
 def upvote_post(post_id, user_id):
     """Upvotes a post."""
-    post_vote = PostVote.query.filter_by(user_id=user_id, post_id=post_id).first()
+    post_vote = get_post_vote(post_id, user_id)
     if post_vote is None:
         post_vote = PostVote(vote=1, user_id=user_id, post_id=post_id)
         db.session.add(post_vote)
@@ -97,7 +103,7 @@ def upvote_post(post_id, user_id):
 
 def downvote_post(post_id, user_id):
     """Downvotes a post."""
-    post_vote = PostVote.query.filter_by(user_id=user_id, post_id=post_id).first()
+    post_vote = get_post_vote(post_id, user_id)
     if post_vote is None:
         post_vote = PostVote(vote=-1, user_id=user_id, post_id=post_id)
         db.session.add(post_vote)

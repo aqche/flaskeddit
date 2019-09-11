@@ -8,7 +8,7 @@ def communities():
     """Route for list of all communities sorted by date created."""
     page = int(request.args.get("page", 1))
     communities = communities_service.get_communities(page)
-    return render_template("communities.jinja2", page="recent", communities=communities)
+    return render_template("communities.jinja2", tab="recent", communities=communities)
 
 
 @communities_blueprint.route("/communities/top")
@@ -16,4 +16,4 @@ def top_communities():
     """Route for list of all communities sorted by most members."""
     page = int(request.args.get("page", 1))
     communities = communities_service.get_communities_by_membership(page)
-    return render_template("communities.jinja2", page="top", communities=communities)
+    return render_template("communities.jinja2", tab="top", communities=communities)

@@ -1,14 +1,14 @@
 {% extends "layout.jinja2" %} {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    {% if page == "recent" %}
+    {% if tab == "recent" %}
       <li class="breadcrumb-item active" aria-current="page">Recent</li>
       <li class="breadcrumb-item">
         <a href="{{ url_for('community.top_community', name=community.name) }}"
           >Top</a
         >
       </li>
-    {% elif page == "top" %}
+    {% elif tab == "top" %}
       <li class="breadcrumb-item">
         <a href="{{ url_for('community.community', name=community.name) }}"
           >Recent</a
