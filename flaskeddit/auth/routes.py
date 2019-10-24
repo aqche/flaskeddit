@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, session, url_for
+from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from flaskeddit.auth import auth_blueprint, auth_service
@@ -36,9 +36,10 @@ def login():
         )
         if login_successful:
             flash("Successfully logged in.", "primary")
-            if session.get("next"):
-                return redirect(session.get("next"))
-            return redirect(url_for("feed.feed"))
+            next_location = request.args.get("next")
+            if next_location is None or not next_location.startswith("/"):
+                next_location = url_for("feed.feed")
+            return redirect(next_location)
         else:
             flash("Login Failed", "danger")
             return redirect(url_for("auth.login"))

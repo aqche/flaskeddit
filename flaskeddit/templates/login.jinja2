@@ -1,6 +1,6 @@
 {% extends "layout.jinja2" %} {% block content %}
 <h2 class="mb-3">Log In</h2>
-<form action="{{ url_for('auth.login') }}" method="POST">
+<form method="POST">
   {{ form.csrf_token }}
   <div class="form-group">
     {{ form.username.label }}
