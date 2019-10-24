@@ -16,7 +16,10 @@ class CommunityForm(FlaskForm):
     submit = SubmitField("Create")
 
     def validate_name(self, name):
-        """Validates that a given community name is not taken and does not contain a space."""
+        """
+        Validates that a given community name does not contain a space and is not taken
+        by an existing community in the database.
+        """
         if re.search(" ", name.data):
             raise ValidationError("Name cannot contain a space.")
 

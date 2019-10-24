@@ -5,7 +5,9 @@ from flaskeddit.communities import communities_blueprint, communities_service
 
 @communities_blueprint.route("/communities")
 def communities():
-    """Route for list of all communities sorted by date created."""
+    """
+    Route for page displaying list of all communities sorted by date created.
+    """
     page = int(request.args.get("page", 1))
     communities = communities_service.get_communities(page)
     return render_template("communities.jinja2", tab="recent", communities=communities)
@@ -13,7 +15,9 @@ def communities():
 
 @communities_blueprint.route("/communities/top")
 def top_communities():
-    """Route for list of all communities sorted by most members."""
+    """
+    Route for page displaying list of all communities sorted by most members.
+    """
     page = int(request.args.get("page", 1))
     communities = communities_service.get_communities_by_membership(page)
     return render_template("communities.jinja2", tab="top", communities=communities)

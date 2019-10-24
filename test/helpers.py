@@ -1,5 +1,7 @@
 def login(test_client, username, password):
-    """Logs in a user."""
+    """
+    Helper to log in a user with the test client.
+    """
     test_client.post(
         "/login",
         data={"username": username, "password": password},

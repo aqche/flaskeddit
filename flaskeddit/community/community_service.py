@@ -3,32 +3,42 @@ from flaskeddit.models import AppUser, Community, CommunityMember, Post, PostVot
 
 
 def get_community(name):
-    """Gets a community."""
+    """
+    Gets a community by name from the database.
+    """
     community = Community.query.filter_by(name=name).first()
     return community
 
 
 def create_community(name, description, user):
-    """Creates a new community."""
+    """
+    Adds a new community to the database.
+    """
     community = Community(name=name, description=description, app_user=user)
     db.session.add(community)
     db.session.commit()
 
 
 def update_community(community, description):
-    """Updates a community description."""
+    """
+    Updates an existing community's description in the database.
+    """
     community.description = description
     db.session.commit()
 
 
 def delete_community(community):
-    """Deletes a community."""
+    """
+    Removes a community from the database.
+    """
     db.session.delete(community)
     db.session.commit()
 
 
 def get_community_posts(community_id, page, ordered_by_votes):
-    """Gets list of posts from a community."""
+    """
+    Gets paginated list of posts from a specified community from the database.
+    """
     ordered_by = Post.date_created.desc()
     if ordered_by_votes:
         ordered_by = db.literal_column("votes").desc()
@@ -51,7 +61,9 @@ def get_community_posts(community_id, page, ordered_by_votes):
 
 
 def get_community_member(community_id, user_id):
-    """Gets a community member."""
+    """
+    Gets a community membership by community and user from the database.
+    """
     community_member = CommunityMember.query.filter_by(
         community_id=community_id, user_id=user_id
     ).first()
@@ -59,13 +71,17 @@ def get_community_member(community_id, user_id):
 
 
 def create_community_member(community, user):
-    """Creates a community member."""
+    """
+    Adds a new community member to the database.
+    """
     community_member = CommunityMember(community=community, app_user=user)
     db.session.add(community_member)
     db.session.commit()
 
 
 def delete_community_member(community_member):
-    """Deletes a community member."""
+    """
+    Removes a community member from the database.
+    """
     db.session.delete(community_member)
     db.session.commit()

@@ -4,6 +4,10 @@ from flaskeddit.models import AppUser
 
 class TestUser:
     def test_get_user(self, test_client):
+        """
+        Test GET request to the /user/_ route to assert the user's profile page is
+        displayed.
+        """
         app_user = AppUser(username="mockusername", password="mockpassword")
         db.session.add(app_user)
         db.session.commit()

@@ -3,7 +3,10 @@ from flaskeddit.models import AppUser, Community, CommunityMember, Post, PostVot
 
 
 def get_feed(user, page, ordered_by_votes):
-    """Get posts from communities a user is a member of."""
+    """
+    Get paginated list of posts from communities that a given user is a member of from
+    the database.
+    """
     ordered_by = Post.date_created.desc()
     if ordered_by_votes:
         ordered_by = db.literal_column("votes").desc()

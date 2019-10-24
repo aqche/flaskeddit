@@ -5,7 +5,7 @@ jobs:
       - image: circleci/python:3.7.3
     steps:
       - checkout
-      - run: 
+      - run:
           command: |
             python3 -m venv venv
             source venv/bin/activate

@@ -14,7 +14,10 @@ class PostForm(FlaskForm):
     submit = SubmitField("Create")
 
     def validate_title(self, title):
-        """Validates that a given post title does not already exist within target community."""
+        """
+        Validates that a given title is not already taken by an existing post within
+        the target community in the database.
+        """
         post = Post.query.filter_by(
             title=title.data, community_id=self.community_id.data
         ).first()

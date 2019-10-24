@@ -11,7 +11,10 @@ from flaskeddit.reply.forms import ReplyForm
 )
 @login_required
 def reply(name, title):
-    """Route for creating a reply."""
+    """
+    Route for creating a reply. On a GET request, it returns the reply creation form.
+    On a POST request, it handles creating a reply.
+    """
     post = post_service.get_post(title, name)
     if post:
         form = ReplyForm()
@@ -30,7 +33,10 @@ def reply(name, title):
 )
 @login_required
 def update_reply(name, title, reply_id):
-    """Route for updating a reply."""
+    """
+    Route for updating a reply. On a GET request, it returns the reply update form. On
+    a POST request, it handles updating a reply.
+    """
     reply = reply_service.get_reply(reply_id)
     if reply:
         if reply.user_id != current_user.id:
@@ -54,7 +60,9 @@ def update_reply(name, title, reply_id):
 )
 @login_required
 def delete_reply(name, title, reply_id):
-    """Route for deleting a reply."""
+    """
+    Route that handles deleting a reply.
+    """
     reply = reply_service.get_reply(reply_id)
     if reply:
         if reply.user_id != current_user.id:
@@ -72,7 +80,9 @@ def delete_reply(name, title, reply_id):
 )
 @login_required
 def upvote_reply(name, title, reply_id):
-    """Route for upvoting a reply."""
+    """
+    Route that handles upvoting a reply as the current user.
+    """
     reply = reply_service.get_reply(reply_id)
     if reply:
         reply_service.upvote_reply(reply_id, current_user.id)
@@ -87,7 +97,9 @@ def upvote_reply(name, title, reply_id):
 )
 @login_required
 def downvote_reply(name, title, reply_id):
-    """Route for downvoting a reply."""
+    """
+    Route that handles downvoting a reply as the current user.
+    """
     reply = reply_service.get_reply(reply_id)
     if reply:
         reply_service.downvote_reply(reply_id, current_user.id)

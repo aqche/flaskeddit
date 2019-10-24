@@ -7,7 +7,10 @@ from flaskeddit.auth.forms import LoginForm, RegisterForm
 
 @auth_blueprint.route("/register", methods=["GET", "POST"])
 def register():
-    """Route for registering new users."""
+    """
+    Route for registering new users. On a GET request, it returns the registration
+    form. On a POST request, it handles user registration.
+    """
     if current_user.is_authenticated:
         return redirect(url_for("feed.feed"))
     form = RegisterForm()
@@ -20,7 +23,10 @@ def register():
 
 @auth_blueprint.route("/login", methods=["GET", "POST"])
 def login():
-    """Route for logging in users."""
+    """
+    Route for logging in users. On a GET request, it returns the login form. On a POST
+    request, it handles user login.
+    """
     if current_user.is_authenticated:
         return redirect(url_for("feed.feed"))
     form = LoginForm()
@@ -42,7 +48,9 @@ def login():
 @auth_blueprint.route("/logout", methods=["POST"])
 @login_required
 def logout():
-    """Route for logging out users."""
+    """
+    Route for logging out current users.
+    """
     auth_service.log_out_user()
     flash("Successfully logged out.", "primary")
     return redirect(url_for("auth.login"))
