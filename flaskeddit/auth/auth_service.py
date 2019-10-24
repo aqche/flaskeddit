@@ -5,7 +5,9 @@ from flaskeddit.models import AppUser
 
 
 def register_user(username, password):
-    """Registers a new user."""
+    """
+    Hashes the given password and registers a new user in the database.
+    """
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
     app_user = AppUser(username=username.lower(), password=hashed_password)
     db.session.add(app_user)
@@ -13,7 +15,10 @@ def register_user(username, password):
 
 
 def log_in_user(username, password):
-    """Logs a user in."""
+    """
+    Hashes and compares the given password with the stored password. If it is a match,
+    logs a user in.
+    """
     app_user = AppUser.query.filter_by(username=username.lower()).first()
     if app_user and bcrypt.check_password_hash(app_user.password, password):
         login_user(app_user)
@@ -23,5 +28,7 @@ def log_in_user(username, password):
 
 
 def log_out_user():
-    """Logs a user out."""
+    """
+    Logs the current user out.
+    """
     logout_user()

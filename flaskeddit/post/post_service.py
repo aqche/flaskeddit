@@ -3,7 +3,9 @@ from flaskeddit.models import AppUser, Community, Post, PostVote, Reply, ReplyVo
 
 
 def get_post(title, community_name):
-    """Gets a post from a community."""
+    """
+    Gets a post from a specified community by title from the database.
+    """
     post = (
         db.session.query(Post)
         .join(Community, Post.community_id == Community.id)
@@ -15,7 +17,10 @@ def get_post(title, community_name):
 
 
 def get_post_with_votes(title, community_name):
-    """Gets a post from a community with votes."""
+    """
+    Gets a post with vote information from a specified community by title from the
+    database.
+    """
     post = (
         db.session.query(
             Post.id,
@@ -40,26 +45,34 @@ def get_post_with_votes(title, community_name):
 
 
 def create_post(title, post, community, user):
-    """Creates a post."""
+    """
+    Adds a new post for the specified community to the database.
+    """
     post = Post(title=title, post=post, community=community, app_user=user)
     db.session.add(post)
     db.session.commit()
 
 
 def update_post(post, post_text):
-    """Updates a post."""
+    """
+    Updates a post's text content in the database.
+    """
     post.post = post_text
     db.session.commit()
 
 
 def delete_post(post):
-    """Deletes a post."""
+    """
+    Removes a post from the database.
+    """
     db.session.delete(post)
     db.session.commit()
 
 
 def get_post_replies(post_id, page, ordered_by_votes):
-    """Get list of replies for a post."""
+    """
+    Gets paginated list of replies for a specified post from the database.
+    """
     ordered_by = Reply.date_created.desc()
     if ordered_by_votes:
         ordered_by = db.literal_column("votes").desc()
@@ -83,13 +96,18 @@ def get_post_replies(post_id, page, ordered_by_votes):
 
 
 def get_post_vote(post_id, user_id):
-    """Gets a post vote."""
+    """
+    Gets a specific user's vote on a post the database.
+    """
     post_vote = PostVote.query.filter_by(user_id=user_id, post_id=post_id).first()
     return post_vote
 
 
 def upvote_post(post_id, user_id):
-    """Upvotes a post."""
+    """
+    Upvotes a post for a user in the database. If the post is already voted on, undo the
+    vote.
+    """
     post_vote = get_post_vote(post_id, user_id)
     if post_vote is None:
         post_vote = PostVote(vote=1, user_id=user_id, post_id=post_id)
@@ -102,7 +120,10 @@ def upvote_post(post_id, user_id):
 
 
 def downvote_post(post_id, user_id):
-    """Downvotes a post."""
+    """
+    Downvotes a post for a user in the database. If the post is already voted on, undo the
+    vote.
+    """
     post_vote = get_post_vote(post_id, user_id)
     if post_vote is None:
         post_vote = PostVote(vote=-1, user_id=user_id, post_id=post_id)

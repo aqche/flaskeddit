@@ -62,8 +62,8 @@
       </div>
     </div>
     <p class="text-muted ml-1">
-      Sort by: 
-      {% if tab == "recent" %} 
+      Sort by:
+      {% if tab == "recent" %}
         Recent /
         <a
           href="{{ url_for('post.top_post', name=post.community_name, title=post.title) }}"
@@ -74,7 +74,7 @@
           href="{{ url_for('post.post', name=post.community_name, title=post.title) }}"
           >Recent</a
         >
-        / Top 
+        / Top
       {% endif %}
     </p>
     <hr />
@@ -129,7 +129,7 @@
                     href="{{ url_for('user.app_user', username=reply.username) }}"
                     >u/{{ reply.username }}</a
                   >
-                  {% if current_user.is_authenticated and current_user.id == reply.user_id %} 
+                  {% if current_user.is_authenticated and current_user.id == reply.user_id %}
                     &#183;
                     <a
                       class="text-muted"
@@ -150,7 +150,7 @@
           <li class="page-item">
             <a class="page-link" href="?page={{ replies.prev_num }}">Previous</a>
           </li>
-        {% endif %} 
+        {% endif %}
         {% if replies.next_num %}
           <li class="page-item">
             <a class="page-link" href="?page={{ replies.next_num }}">Next</a>

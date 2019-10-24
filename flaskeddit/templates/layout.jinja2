@@ -105,7 +105,7 @@
     </header>
     <section class="full-height">
       <div class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %} 
+        {% with messages = get_flashed_messages(with_categories=true) %}
           {% for category, message in messages %}
             <div
               class="alert alert-{{ category }} alert-dismissible fade show"
@@ -121,8 +121,8 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-          {% endfor %} 
-        {% endwith %} 
+          {% endfor %}
+        {% endwith %}
         {% block content %} {% endblock %}
       </div>
     </section>

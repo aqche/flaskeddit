@@ -22,13 +22,23 @@ class RegisterForm(FlaskForm):
     submit = SubmitField("Register")
 
     def validate_username(self, username):
-        """Validates that a user with the given username does not already exist."""
+        """
+        Validates that a user with the given username does not already exist in the
+        database.
+        """
         app_user = AppUser.query.filter_by(username=username.data.lower()).first()
         if app_user is not None:
             raise ValidationError("Username is taken.")
 
     def validate_password(self, password):
-        """Validates that a given password meets complexity requirements."""
+        """
+        Validates that a given password meets the following complexity requirements:
+            - At least 8 characters long
+            - Includes a number
+            - Includes an uppercase character
+            - Includes a lowercase character
+            - Includes a special character
+        """
         if (
             re.search(r"\d", password.data) is None
             or re.search(r"[A-Z]", password.data) is None

@@ -4,7 +4,10 @@ from flaskeddit.models import AppUser, Community
 
 class TestCommunities:
     def test_get_communities(self, test_client):
-        """Test GET request to the communities route."""
+        """
+        Test GET request to the /communities route to assert the page displays existing
+        communities.
+        """
         app_user = AppUser(username="mockusername", password="mockpassword")
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -20,7 +23,10 @@ class TestCommunities:
         assert bytes(community.name, "utf-8") in response.data
 
     def test_get_top_communities(self, test_client):
-        """Test GET request to the top communities route."""
+        """
+        Test GET request to the /communities/top route to assert the page displays
+        existing communities.
+        """
         app_user = AppUser(username="mockusername", password="mockpassword")
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user

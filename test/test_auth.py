@@ -6,7 +6,10 @@ from flaskeddit.models import AppUser
 
 class TestAuth:
     def test_get_register(self, test_client):
-        """Test GET request to the register route."""
+        """
+        Tests GET request to the /register route to assert the registration page is
+        returned.
+        """
         response = test_client.get("/register")
 
         assert response is not None
@@ -14,7 +17,10 @@ class TestAuth:
         assert b"Register" in response.data
 
     def test_post_register(self, test_client):
-        """Test POST request to the register route."""
+        """
+        Test POST request to the /register route to assert the user is successfully
+        registered.
+        """
         response = test_client.post(
             "/register",
             data={
@@ -30,7 +36,9 @@ class TestAuth:
         assert b"Successfully registered." in response.data
 
     def test_get_login(self, test_client):
-        """Test GET request to the login route."""
+        """
+        Test GET request to the /login route to assert the login page is returned.
+        """
         response = test_client.get("/login")
 
         assert response is not None
@@ -38,7 +46,10 @@ class TestAuth:
         assert b"Log In" in response.data
 
     def test_post_login(self, test_client):
-        """Test POST request to the login route."""
+        """
+        Test POST request to the /login route to assert the user is successfully logged
+        in.
+        """
         password = "Mockpassword123!"
         hashed_password = bcrypt.generate_password_hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
@@ -56,7 +67,10 @@ class TestAuth:
         assert b"Successfully logged in" in response.data
 
     def test_post_logout(self, test_client):
-        """Test POST request to the logout route."""
+        """
+        Test POST request to the /logout route to assert the user is successfully
+        logged out.
+        """
         password = "Mockpassword123!"
         hashed_password = bcrypt.generate_password_hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)

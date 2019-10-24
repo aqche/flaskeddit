@@ -3,7 +3,9 @@ from flaskeddit.models import AppUser, Community, CommunityMember
 
 
 def get_communities(page):
-    """Get list of communities by date created."""
+    """
+    Gets paginated list of communities by date created from the database.
+    """
     communities = (
         db.session.query(
             Community.id,
@@ -21,7 +23,9 @@ def get_communities(page):
 
 
 def get_communities_by_membership(page):
-    """Get list of communities by number of members."""
+    """
+    Gets paginated list of communities by number of members from the database.
+    """
     communities = (
         db.session.query(
             Community.id,

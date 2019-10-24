@@ -8,7 +8,9 @@ from flaskeddit.post.forms import PostForm, UpdatePostForm
 
 @post_blueprint.route("/community/<string:name>/post/<string:title>")
 def post(name, title):
-    """Route for viewing a post and its replies sorted by date created."""
+    """
+    Route for page displaying a post and its replies sorted by date created.
+    """
     page = int(request.args.get("page", 1))
     post = post_service.get_post_with_votes(title, name)
     if post:
@@ -20,7 +22,9 @@ def post(name, title):
 
 @post_blueprint.route("/community/<string:name>/post/<string:title>/top")
 def top_post(name, title):
-    """Route for viewing a post and its replies sorted by upvotes."""
+    """
+    Route for page displaying a post and its replies sorted by upvotes.
+    """
     page = int(request.args.get("page", 1))
     post = post_service.get_post_with_votes(title, name)
     if post:
@@ -33,7 +37,10 @@ def top_post(name, title):
 @post_blueprint.route("/community/<string:name>/post/create", methods=["GET", "POST"])
 @login_required
 def create_post(name):
-    """Route for creating a post."""
+    """
+    Route for creating a post. On a GET request, it returns the post creation form. On
+    a POST request, it handles creating a post.
+    """
     community = community_service.get_community(name)
     if community:
         form = PostForm()
@@ -54,7 +61,10 @@ def create_post(name):
 )
 @login_required
 def update_post(name, title):
-    """Route for updating a post."""
+    """
+    Route for updating a post. On a GET request, it returns the post update form. On a
+    POST request, it handles updating a post.
+    """
     post = post_service.get_post(title, name)
     if post:
         if post.user_id != current_user.id:
@@ -75,7 +85,9 @@ def update_post(name, title):
 )
 @login_required
 def delete_post(name, title):
-    """Route for deleting a post."""
+    """
+    Route that handles deleting a post.
+    """
     post = post_service.get_post(title, name)
     if post:
         if post.user_id != current_user.id:
@@ -92,7 +104,9 @@ def delete_post(name, title):
 )
 @login_required
 def upvote_post(name, title):
-    """Route for upvoting a post."""
+    """
+    Route that handles upvoting a post as the current user.
+    """
     post = post_service.get_post(title, name)
     if post:
         post_service.upvote_post(post.id, current_user.id)
@@ -106,7 +120,9 @@ def upvote_post(name, title):
 )
 @login_required
 def downvote_post(name, title):
-    """Route for downvoting a post."""
+    """
+    Route that handles downvoting a post as the current user.
+    """
     post = post_service.get_post(title, name)
     if post:
         post_service.downvote_post(post.id, current_user.id)

@@ -7,7 +7,9 @@ from flaskeddit.community.forms import CommunityForm, UpdateCommunityForm
 
 @community_blueprint.route("/community/<string:name>")
 def community(name):
-    """Route for viewing a community and its posts sorted by date created."""
+    """
+    Route for page displaying a community and its posts sorted by date created.
+    """
     page = int(request.args.get("page", 1))
     community = community_service.get_community(name)
     if community:
@@ -30,7 +32,9 @@ def community(name):
 
 @community_blueprint.route("/community/<string:name>/top")
 def top_community(name):
-    """Route for viewing a community and its posts sorted by upvotes."""
+    """
+    Route for page displaying a community and its posts sorted by number of upvotes.
+    """
     page = int(request.args.get("page", 1))
     community = community_service.get_community(name)
     if community:
@@ -54,7 +58,10 @@ def top_community(name):
 @community_blueprint.route("/community/create", methods=["GET", "POST"])
 @login_required
 def create_community():
-    """Route for creating a community."""
+    """
+    Route for creating a community. On a GET request, it returns the community creation
+    form. On a POST request, it processes a community creation.
+    """
     form = CommunityForm()
     if form.validate_on_submit():
         community_service.create_community(
@@ -68,7 +75,10 @@ def create_community():
 @community_blueprint.route("/community/<string:name>/update", methods=["GET", "POST"])
 @login_required
 def update_community(name):
-    """Route for updating a community description."""
+    """
+    Route for updating a community description. On a GET request, it returns the update
+    community form. On a POST request, it processes the community update.
+    """
     community = community_service.get_community(name)
     if community:
         if community.user_id != current_user.id:
@@ -87,7 +97,9 @@ def update_community(name):
 @community_blueprint.route("/community/<string:name>/delete", methods=["POST"])
 @login_required
 def delete_community(name):
-    """Route for deleting a community."""
+    """
+    Route that handles deleting a community.
+    """
     community = community_service.get_community(name)
     if community:
         if community.user_id != current_user.id:
@@ -102,7 +114,9 @@ def delete_community(name):
 @community_blueprint.route("/community/<string:name>/join", methods=["POST"])
 @login_required
 def join_community(name):
-    """Route for joining a community."""
+    """
+    Route that handles adding the current user as a community member.
+    """
     community = community_service.get_community(name)
     if community:
         community_member = community_service.get_community_member(
@@ -119,7 +133,9 @@ def join_community(name):
 @community_blueprint.route("/community/<string:name>/leave", methods=["POST"])
 @login_required
 def leave_community(name):
-    """Route for leaving a community."""
+    """
+    Route that handles removing the current user as a community member.
+    """
     community = community_service.get_community(name)
     if community:
         community_member = community_service.get_community_member(
