@@ -1,6 +1,8 @@
 from test import helpers
 
-from flaskeddit import bcrypt, db
+from passlib.hash import bcrypt
+
+from flaskeddit import db
 from flaskeddit.models import AppUser
 
 
@@ -51,7 +53,7 @@ class TestAuth:
         in.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         db.session.add(app_user)
         db.session.commit()
@@ -72,7 +74,7 @@ class TestAuth:
         logged out.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         db.session.add(app_user)
         db.session.commit()
