@@ -1,6 +1,14 @@
+# OS
 .DS_Store
+
+# Editor
 .vscode/
+
+# Python
 venv/
 __pycache__/
-app.db
 .pytest_cache
+
+# DB
+app.db
+test.db
