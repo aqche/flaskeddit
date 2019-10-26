@@ -1,6 +1,8 @@
 from test import helpers
 
-from flaskeddit import bcrypt, db
+from passlib.hash import bcrypt
+
+from flaskeddit import db
 from flaskeddit.models import AppUser, Community, Post, Reply, ReplyVote
 
 
@@ -11,7 +13,7 @@ class TestReply:
         reply page is displayed.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -42,7 +44,7 @@ class TestReply:
         successfully created.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -75,7 +77,7 @@ class TestReply:
         update reply page is displayed.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -108,7 +110,7 @@ class TestReply:
         reply is successfully updated.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -143,7 +145,7 @@ class TestReply:
         reply is successfully deleted.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -177,7 +179,7 @@ class TestReply:
         user successfuly upvotes the reply.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -214,7 +216,7 @@ class TestReply:
         the user successfuly downvotes the reply.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user

@@ -1,6 +1,8 @@
 from test import helpers
 
-from flaskeddit import bcrypt, db
+from passlib.hash import bcrypt
+
+from flaskeddit import db
 from flaskeddit.models import AppUser, Community
 
 
@@ -49,7 +51,7 @@ class TestCommunity:
         creation page is returned.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         db.session.add(app_user)
         db.session.commit()
@@ -67,7 +69,7 @@ class TestCommunity:
         successfully created.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         db.session.add(app_user)
         db.session.commit()
@@ -89,7 +91,7 @@ class TestCommunity:
         update page is returned.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -111,7 +113,7 @@ class TestCommunity:
         successfully updated.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -137,7 +139,7 @@ class TestCommunity:
         successfully deleted.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -161,7 +163,7 @@ class TestCommunity:
         successfully joined the community.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user
@@ -185,7 +187,7 @@ class TestCommunity:
         successfully left the community.
         """
         password = "Mockpassword123!"
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.hash(password)
         app_user = AppUser(username="mockusername", password=hashed_password)
         community = Community(
             name="mockcommunity", description="mockdescription", app_user=app_user

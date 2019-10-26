@@ -2,7 +2,7 @@ import re
 
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, SubmitField, ValidationError
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, Length
 
 from flaskeddit.models import AppUser
 
@@ -16,6 +16,7 @@ class RegisterForm(FlaskForm):
         validators=[
             DataRequired(),
             EqualTo("confirm_password", message="Passwords must match."),
+            Length(min=6),
         ],
     )
     confirm_password = PasswordField("Confirm Password", validators=[DataRequired()])
@@ -29,26 +30,6 @@ class RegisterForm(FlaskForm):
         app_user = AppUser.query.filter_by(username=username.data.lower()).first()
         if app_user is not None:
             raise ValidationError("Username is taken.")
-
-    def validate_password(self, password):
-        """
-        Validates that a given password meets the following complexity requirements:
-            - At least 8 characters long
-            - Includes a number
-            - Includes an uppercase character
-            - Includes a lowercase character
-            - Includes a special character
-        """
-        if (
-            re.search(r"\d", password.data) is None
-            or re.search(r"[A-Z]", password.data) is None
-            or re.search(r"[a-z]", password.data) is None
-            or re.search(r"\W", password.data) is None
-            or len(password.data) < 8
-        ):
-            raise ValidationError(
-                "Password should be at least 8 characters long including a number, an uppercase character, a lowercase character, and a special character."
-            )
 
 
 class LoginForm(FlaskForm):
