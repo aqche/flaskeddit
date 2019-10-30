@@ -33,7 +33,7 @@ Clone the project.
 git clone https://github.com/aqche/flaskeddit.git
 ```
 
-Use create a `venv` and use `pip` to install the project dependencies.
+Setup a `venv` and use `pip` to install the project dependencies.
 
 ```
 cd flaskeddit
