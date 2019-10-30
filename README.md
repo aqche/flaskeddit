@@ -10,11 +10,11 @@ A simplified Reddit clone built in Flask.
 * Create communities.
 * Create community posts.
 * Reply to community posts.
-* Edit or delete your communites, posts, and replies.
+* Edit or delete your communities, posts, and replies.
 * Join communities.
 * Get a feed of posts from your joined communities.
 * Upvote or downvote posts and replies.
-* Sort communites, posts, and replies by latest or most popular.
+* Sort communities, posts, and replies by latest or most popular.
 * Basic user profiles.
 
 ## Getting Started
@@ -33,7 +33,7 @@ Clone the project.
 git clone https://github.com/aqche/flaskeddit.git
 ```
 
-Use create a `venv` and use `pip` to install the project dependencies.
+Setup a `venv` and use `pip` to install the project dependencies.
 
 ```
 cd flaskeddit

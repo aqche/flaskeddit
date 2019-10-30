@@ -176,7 +176,7 @@ class TestReply:
     def test_post_upvote_reply(self, test_client):
         """
         Test POST request to the /community/_/post/_/reply/_/upvote route to assert the
-        user successfuly upvotes the reply.
+        user successfully upvotes the reply.
         """
         password = "Mockpassword123!"
         hashed_password = bcrypt.hash(password)
@@ -213,7 +213,7 @@ class TestReply:
     def test_post_downvote_reply(self, test_client):
         """
         Test POST request to the /community/_/post/_/reply/_/downvote route to assert
-        the user successfuly downvotes the reply.
+        the user successfully downvotes the reply.
         """
         password = "Mockpassword123!"
         hashed_password = bcrypt.hash(password)
