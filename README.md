@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/aqche/flaskeddit.svg?style=svg)](https://circleci.com/gh/aqche/flaskeddit)
 
-A simplified Reddit clone built in Flask.
+A simplified Reddit clone built with Flask.
 
 ## Features
 
