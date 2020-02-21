@@ -1,21 +1,21 @@
 # flaskeddit
 
-[![CircleCI](https://circleci.com/gh/aqche/flaskeddit.svg?style=svg)](https://circleci.com/gh/aqche/flaskeddit)
+[![CircleCI](https://circleci.com/gh/aqche/flaskeddit.svg?style=shield)](https://circleci.com/gh/aqche/flaskeddit)
 
 A simplified Reddit clone built with Flask.
 
 ## Features
 
-* Secure registration and authentication.
-* Create communities.
-* Create community posts.
-* Reply to community posts.
-* Edit or delete your communities, posts, and replies.
-* Join communities.
-* Get a feed of posts from your joined communities.
-* Upvote or downvote posts and replies.
-* Sort communities, posts, and replies by latest or most popular.
-* Basic user profiles.
+- Secure registration and authentication.
+- Create communities.
+- Create community posts.
+- Reply to community posts.
+- Edit or delete your communities, posts, and replies.
+- Join communities.
+- Get a feed of posts from your joined communities.
+- Upvote or downvote posts and replies.
+- Sort communities, posts, and replies by latest or most popular.
+- Basic user profiles.
 
 ## Getting Started
 
@@ -80,8 +80,8 @@ git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git mast
 
 ## Built With
 
-* [Flask](http://flask.pocoo.org/) - Python Framework
-* [Bootstrap](https://getbootstrap.com/) - CSS Framework
+- [Flask](http://flask.pocoo.org/) - Python Framework
+- [Bootstrap](https://getbootstrap.com/) - CSS Framework
 
 ## Contributing
 
@@ -89,7 +89,7 @@ Feel free to submit a pull request!
 
 ## Authors
 
-* **aqche** - *Author* - [aqche](https://github.com/aqche)
+- **aqche** - _Author_ - [aqche](https://github.com/aqche)
 
 See also the list of [contributors](https://github.com/aqche/flaskeddit/contributors) who participated in this project.
 
@@ -99,6 +99,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## Acknowledgments
 
-* [reddit](https://www.reddit.com/) - The inspiration for this site.
-* [logohub.io](https://logohub.io/) - For the neat logo.
-* [favicon.io](https://favicon.io/) - For the matching favicon.
+- [reddit](https://www.reddit.com/) - The inspiration for this site.
+- [LogoHub](https://logohub.io/) - For the neat logo.
+- [favicon.io](https://favicon.io/) - For the matching favicon.

@@ -1,4 +1,4 @@
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from passlib.hash import bcrypt
 
 from flaskeddit import db
@@ -26,3 +26,10 @@ def log_in_user(username, password):
         return True
     else:
         return False
+
+
+def log_out_user():
+    """
+    Logs the current user out.
+    """
+    logout_user()

@@ -1,5 +1,5 @@
 from flask import flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, logout_user
+from flask_login import current_user, login_required
 
 from flaskeddit.auth import auth_blueprint, auth_service
 from flaskeddit.auth.forms import LoginForm, RegisterForm
@@ -52,6 +52,6 @@ def logout():
     """
     Route for logging out current users.
     """
-    logout_user()
+    auth_service.log_out_user()
     flash("Successfully logged out.", "primary")
     return redirect(url_for("auth.login"))
