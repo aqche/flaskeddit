@@ -68,7 +68,9 @@ pytest
 
 ## Deployment
 
-Flaskeddit is automatically deployed to [Heroku](https://www.heroku.com/) using [CircleCI](https://circleci.com/).
+Flaskeddit is hosted on [Heroku](https://www.heroku.com/). To set up the required infrastructure for the project, you can use the [terraform-heroku-flask-postgres](https://github.com/aqche/terraform-heroku-flask-postgres) Terraform module.
+
+The application is automatically deployed using [CircleCI](https://circleci.com/).
 
 You can also use `git` to manually deploy the application.
 
