@@ -20,7 +20,7 @@ def community(name):
                 community.id, current_user.id
             )
         return render_template(
-            "community.jinja2",
+            "community.html",
             tab="recent",
             community=community,
             posts=posts,
@@ -45,7 +45,7 @@ def top_community(name):
                 community.id, current_user.id
             )
         return render_template(
-            "community.jinja2",
+            "community.html",
             tab="top",
             community=community,
             posts=posts,
@@ -69,7 +69,7 @@ def create_community():
         )
         flash("Successfully created community.", "primary")
         return redirect(url_for("community.community", name=form.name.data))
-    return render_template("create_community.jinja2", form=form)
+    return render_template("create_community.html", form=form)
 
 
 @community_blueprint.route("/community/<string:name>/update", methods=["GET", "POST"])
@@ -89,7 +89,7 @@ def update_community(name):
             flash("Successfully updated community.", "primary")
             return redirect(url_for("community.community", name=name))
         form.description.data = community.description
-        return render_template("update_community.jinja2", name=name, form=form)
+        return render_template("update_community.html", name=name, form=form)
     else:
         abort(404)
 

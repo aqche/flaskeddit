@@ -18,7 +18,7 @@ def register():
         auth_service.register_user(form.username.data, form.password.data)
         flash("Successfully registered.", "primary")
         return redirect(url_for("auth.login"))
-    return render_template("register.jinja2", form=form)
+    return render_template("register.html", form=form)
 
 
 @auth_blueprint.route("/login", methods=["GET", "POST"])
@@ -43,7 +43,7 @@ def login():
         else:
             flash("Login Failed", "danger")
             return redirect(url_for("auth.login"))
-    return render_template("login.jinja2", form=form)
+    return render_template("login.html", form=form)
 
 
 @auth_blueprint.route("/logout", methods=["POST"])
