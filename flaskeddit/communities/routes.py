@@ -10,7 +10,7 @@ def communities():
     """
     page = int(request.args.get("page", 1))
     communities = communities_service.get_communities(page)
-    return render_template("communities.jinja2", tab="recent", communities=communities)
+    return render_template("communities.html", tab="recent", communities=communities)
 
 
 @communities_blueprint.route("/communities/top")
@@ -20,4 +20,4 @@ def top_communities():
     """
     page = int(request.args.get("page", 1))
     communities = communities_service.get_communities_by_membership(page)
-    return render_template("communities.jinja2", tab="top", communities=communities)
+    return render_template("communities.html", tab="top", communities=communities)

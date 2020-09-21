@@ -22,7 +22,7 @@ def reply(name, title):
             reply_service.create_reply(form.reply.data, post, current_user)
             flash("Successfully created reply.", "primary")
             return redirect(url_for("post.post", name=name, title=title))
-        return render_template("create_reply.jinja2", name=name, title=title, form=form)
+        return render_template("create_reply.html", name=name, title=title, form=form)
     else:
         abort(404)
 
@@ -48,7 +48,7 @@ def update_reply(name, title, reply_id):
             return redirect(url_for("post.post", name=name, title=title))
         form.reply.data = reply.reply
         return render_template(
-            "update_reply.jinja2", name=name, title=title, reply_id=reply_id, form=form
+            "update_reply.html", name=name, title=title, reply_id=reply_id, form=form
         )
     else:
         abort(404)

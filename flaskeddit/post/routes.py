@@ -15,7 +15,7 @@ def post(name, title):
     post = post_service.get_post_with_votes(title, name)
     if post:
         replies = post_service.get_post_replies(post.id, page, False)
-        return render_template("post.jinja2", tab="recent", post=post, replies=replies)
+        return render_template("post.html", tab="recent", post=post, replies=replies)
     else:
         abort(404)
 
@@ -29,7 +29,7 @@ def top_post(name, title):
     post = post_service.get_post_with_votes(title, name)
     if post:
         replies = post_service.get_post_replies(post.id, page, True)
-        return render_template("post.jinja2", tab="top", post=post, replies=replies)
+        return render_template("post.html", tab="top", post=post, replies=replies)
     else:
         abort(404)
 
@@ -51,7 +51,7 @@ def create_post(name):
             )
             flash("Successfully created post.", "primary")
             return redirect(url_for("post.post", name=name, title=form.title.data))
-        return render_template("create_post.jinja2", name=name, form=form)
+        return render_template("create_post.html", name=name, form=form)
     else:
         abort(404)
 
@@ -75,7 +75,7 @@ def update_post(name, title):
             flash("Successfully updated post.", "primary")
             return redirect(url_for("post.post", name=name, title=title))
         form.post.data = post.post
-        return render_template("update_post.jinja2", name=name, title=title, form=form)
+        return render_template("update_post.html", name=name, title=title, form=form)
     else:
         abort(404)
 

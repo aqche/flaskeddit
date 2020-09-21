@@ -1,4 +1,4 @@
-{% extends "layout.jinja2" %} {% block content %}
+{% extends "layout.html" %} {% block content %}
 <h2 class="mb-3">Update Reply</h2>
 <form
   action="{{ url_for('reply.update_reply', name=name, title=title, reply_id=reply_id) }}"
@@ -6,8 +6,7 @@
 >
   {{ form.csrf_token }}
   <div class="form-group">
-    {{ form.reply.label }}
-    {{ form.reply(class="form-control") }}
+    {{ form.reply.label }} {{ form.reply(class="form-control") }}
   </div>
   {{ form.submit(class="btn btn-primary") }}
 </form>
