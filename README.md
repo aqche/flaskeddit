@@ -77,7 +77,7 @@ module "terraform-heroku-app-postgres" {
   source                = "github.com/aqche/terraform-heroku-app-postgres.git"
   name                  = "heroku-app-name"
   sensitive_config_vars = {
-      SECRET_KEY = "<SECRET_KEY>"
+      SECRET_KEY = "<secret_key>"
   }
 }
 ```
