@@ -4,9 +4,11 @@
 
 A simplified Reddit clone built with Flask.
 
+![flaskeddit.png](./flaskeddit.png)
+
 ## Features
 
-- Secure registration and authentication.
+- Registration and authentication.
 - Create communities.
 - Create community posts.
 - Reply to community posts.
