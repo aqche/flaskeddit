@@ -31,13 +31,13 @@ To run this application you need [Python](https://www.python.org/), [pip](https:
 
 Clone the project.
 
-```
+```sh
 git clone https://github.com/aqche/flaskeddit.git
 ```
 
 Setup a `venv` and use `pip` to install the project dependencies.
 
-```
+```sh
 cd flaskeddit
 python3 -m venv venv
 source venv/bin/activate
@@ -46,7 +46,7 @@ pip install -r requirements.txt
 
 Set the `FLASK_APP` environment variable, create the SQLite database, and start the app. Now you can give the application a try at [http://localhost:5000](http://localhost:5000)!
 
-```
+```sh
 export FLASK_APP=flaskeddit.py
 flask cli create_db
 flask run
@@ -54,7 +54,7 @@ flask run
 
 You can also serve the application locally using [gunicorn](https://gunicorn.org/).
 
-```
+```sh
 gunicorn "flaskeddit:create_app()"
 ```
 
@@ -64,19 +64,29 @@ Flaskeddit is tested using pytest.
 
 Use `pytest` to run the application's tests.
 
-```
+```sh
 pytest
 ```
 
 ## Deployment
 
-Flaskeddit is hosted on [Heroku](https://www.heroku.com/). To set up the required infrastructure for the project, you can use the [terraform-heroku-flask-postgres](https://github.com/aqche/terraform-heroku-flask-postgres) Terraform module.
+Flaskeddit is hosted on [Heroku](https://www.heroku.com/). To set up the required infrastructure for the project, you can use the [terraform-heroku-app-postgres](https://github.com/aqche/terraform-heroku-app-postgres) Terraform module.
+
+```hcl
+module "terraform-heroku-app-postgres" {
+  source                = "github.com/aqche/terraform-heroku-app-postgres.git"
+  name                  = "heroku-app-name"
+  sensitive_config_vars = {
+      SECRET_KEY = "<SECRET_KEY>"
+  }
+}
+```
 
 The application is automatically deployed using [CircleCI](https://circleci.com/).
 
 You can also use `git` to manually deploy the application.
 
-```
+```sh
 export HEROKU_API_KEY="heroku_api_key"
 export HEROKU_APP_NAME="heroku_app_name"
 git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
