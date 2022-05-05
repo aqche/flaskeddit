@@ -87,8 +87,8 @@ The application is automatically deployed using [CircleCI](https://circleci.com/
 You can also use `git` to manually deploy the application.
 
 ```sh
-export HEROKU_API_KEY="heroku_api_key"
-export HEROKU_APP_NAME="heroku_app_name"
+export HEROKU_API_KEY="<HEROKU_API_KEY>"
+export HEROKU_APP_NAME="<HEROKU_APP_NAME>"
 git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
 ```
 
